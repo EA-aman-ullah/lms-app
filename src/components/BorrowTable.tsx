@@ -1,21 +1,23 @@
-import requestService from "../services/request-service";
+import { Borrow } from "../entites/Borrow";
+import borrowService from "../services/borrow-service";
 import Botton from "./Botton";
-import { Request } from "../entites/Request";
-type RequestId = Request["_id"];
 
-const RequestList = () => {
-  const { data } = requestService.useGetAll<Request[]>(["requests"]);
-  const { mutate } = requestService.useUpdate<RequestId>([
-    "requests",
-    "overviewCard",
-    "borrowsBooks",
-  ]);
+const BorrowTable = () => {
+  const { data } = borrowService.useGetAll<Borrow[]>(["borrowsBooks"]);
+  const { mutate } = borrowService.useUpdate(
+    ["borrowsBooks", "overviewCard"],
+    "Succefully Assigned"
+  );
 
-  const handleApprove = (id: string) => {
+  const handleAsign = (id: string) => {
+    mutate([`/assigned/${id}`, null]);
+  };
+
+  const handleReturn = (id: string) => {
     mutate([id, null]);
   };
 
-  if (data?.length === 0) return <p>No book Requested</p>;
+  if (data?.length === 0) return <p>No Book Borrowed</p>;
 
   return (
     <table className="bg-slate-50">
@@ -27,7 +29,8 @@ const RequestList = () => {
           <th></th>
           <th>Name</th>
           <th>Student ID</th>
-          <th>Status</th>
+          <th>Returnd</th>
+          <th>Assigned</th>
         </tr>
       </thead>
       <tbody>
@@ -56,13 +59,27 @@ const RequestList = () => {
             <td>{el.student.studentId}</td>
             <td>
               <span className="border border-blue-700 rounded-xl p-1 text-[#636AE8] ">
-                {!el.isApproved ? "Pending" : "Approved"}
+                {el.isAssigned && el.isNotReturned
+                  ? "pending"
+                  : el.isAssigned && !el.isNotReturned
+                  ? "Returned"
+                  : "Not Assigned"}
               </span>
             </td>
             <td>
-              {!el.isApproved && (
-                <Botton handleFunction={handleApprove} id={el._id}>
-                  Approve
+              <span className="border border-blue-700 rounded-xl p-1 text-[#636AE8] ">
+                {el.isAssigned ? "Assigned" : "Pending"}
+              </span>
+            </td>
+            <td>
+              {!el.isAssigned && (
+                <Botton handleFunction={handleAsign} id={el._id}>
+                  Assign
+                </Botton>
+              )}
+              {el.isAssigned && el.isNotReturned && (
+                <Botton handleFunction={handleReturn} id={el._id}>
+                  Return
                 </Botton>
               )}
             </td>
@@ -73,4 +90,4 @@ const RequestList = () => {
   );
 };
 
-export default RequestList;
+export default BorrowTable;

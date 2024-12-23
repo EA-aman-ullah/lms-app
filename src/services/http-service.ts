@@ -2,22 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import APIClient from "./api-client";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
+import { Request } from "../entites/Request";
 
-interface APIC_SERVICE<T> {
-  getAll: () => T;
-  getById: () => T;
-  post: () => T;
-  put: (paramerter: T | FormData) => T;
-  delete: () => T;
-}
-
-class httpService<T> {
+class httpService {
   endpiont: string;
-  apiClient: APIC_SERVICE<T>;
 
   constructor(endpiont: string) {
     this.endpiont = endpiont;
-    this.apiClient = new APIClient<T>(endpiont) as any;
   }
 
   useGetAll = <T>(queryKey: string[], config: AxiosRequestConfig = {}) => {
@@ -91,7 +82,7 @@ class httpService<T> {
 
     const queryClient = useQueryClient();
 
-    return useMutation<T, AxiosError | Error, [string, T | null]>({
+    return useMutation<Request, AxiosError | Error, [string, T | null]>({
       mutationFn: ([id, payload]) => put(id, payload),
 
       onSuccess: (data) => {
