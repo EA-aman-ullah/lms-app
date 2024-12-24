@@ -6,17 +6,15 @@ import Book from "../entites/Books";
 
 const BookDetailPage = () => {
   const { id } = useParams();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
   const navigate = useNavigate();
-  const { data } = book.useGetById<Book>(["book", `${id}`], id as string);
+  const { data } = book.useGetById<Book>(["book", `${id}`], id as string, {
+    params: { studentId: currentUser?._id },
+  });
   const { mutate } = request.usePost(
     ["overviewCard", "requests", "book", `${id}`],
     "Resquest Submitted."
   );
-  let isrequested;
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
-  isrequested = data?.requests.find((el) => el.studentId === currentUser?._id);
-
   const handleRequest = () => {
     if (currentUser) {
       mutate({ bookId: id as string });
@@ -55,7 +53,7 @@ const BookDetailPage = () => {
             <span>Book ID: </span>
             {data?.bookId}
           </div>
-          {isrequested && (
+          {!data?.isLegible && (
             <p>
               The Request has been Submitted. You can get book After aprovel
               <span
@@ -68,11 +66,11 @@ const BookDetailPage = () => {
           )}
           <button
             onClick={handleRequest}
-            disabled={isrequested ? true : false}
+            disabled={!data?.isLegible ? true : false}
             className={
-              isrequested
+              !data?.isLegible
                 ? "bg-[#9b9ed2] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
-                : "bg-[#636AE8] text-[#fff] rounded px-5 py-2 text-nowrap"
+                : "bg-[#636AE8] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
             }
           >
             Send Request

@@ -1,7 +1,7 @@
 export interface Borrow {
   _id: string;
   isAssigned: boolean;
-  isNotReturned: boolean;
+  isReturned: boolean;
   book: {
     _id: string;
     autherName: string;

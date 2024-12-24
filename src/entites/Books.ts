@@ -9,6 +9,7 @@ export default interface Book {
   reservedNumber: number;
   imageURL: string;
   dateAdd: Date;
+  isLegible: boolean;
   requests: {
     studentId: string;
     studentName: string;

@@ -3,7 +3,7 @@ import AddBook from "../components/AddBook";
 import OverviewCard from "../components/OverviewCard";
 import RequestList from "../components/RequestList";
 import { useState } from "react";
-import BorrowTable from "../components/borrowTable";
+import BorrowTable from "../components/BorrowTable";
 
 const dashboard = () => {
   const [table, setTable] = useState("request");

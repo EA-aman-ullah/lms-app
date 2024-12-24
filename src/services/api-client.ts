@@ -14,7 +14,7 @@ export class APIAuthClient<T> {
     this.endpiont = endpiont;
   }
 
-  post =(payload: T) => {
+  post = (payload: T) => {
     return axiosInstance
       .post<string | T>(this.endpiont, payload)
       .then((res) => {
@@ -41,9 +41,9 @@ class APIClient<T> extends APIAuthClient<T> {
     return axiosInstance.get<T>(this.endpiont, config).then((res) => res.data);
   };
 
-  getById = (id: number | string) => {
+  getById = (id: number | string, config: AxiosRequestConfig) => {
     return axiosInstance
-      .get<T>(this.endpiont + "/" + id)
+      .get<T>(this.endpiont + "/" + id, config)
       .then((res) => res.data);
   };
 

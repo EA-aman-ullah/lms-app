@@ -5,8 +5,8 @@ import Botton from "./Botton";
 const BorrowTable = () => {
   const { data } = borrowService.useGetAll<Borrow[]>(["borrowsBooks"]);
   const { mutate } = borrowService.useUpdate(
-    ["borrowsBooks", "overviewCard"],
-    "Succefully Assigned"
+    ["borrowsBooks", "overviewCard", "book"],
+    "Oppration Successfull"
   );
 
   const handleAsign = (id: string) => {
@@ -59,9 +59,9 @@ const BorrowTable = () => {
             <td>{el.student.studentId}</td>
             <td>
               <span className="border border-blue-700 rounded-xl p-1 text-[#636AE8] ">
-                {el.isAssigned && el.isNotReturned
+                {el.isAssigned && !el.isReturned
                   ? "pending"
-                  : el.isAssigned && !el.isNotReturned
+                  : el.isAssigned && el.isReturned
                   ? "Returned"
                   : "Not Assigned"}
               </span>
@@ -77,7 +77,7 @@ const BorrowTable = () => {
                   Assign
                 </Botton>
               )}
-              {el.isAssigned && el.isNotReturned && (
+              {el.isAssigned && !el.isReturned && (
                 <Botton handleFunction={handleReturn} id={el._id}>
                   Return
                 </Botton>

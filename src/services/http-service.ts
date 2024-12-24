@@ -20,12 +20,16 @@ class httpService {
     });
   };
 
-  useGetById = <T>(queryKey: string[], id: string) => {
+  useGetById = <T>(
+    queryKey: string[],
+    id: string,
+    config: AxiosRequestConfig = {}
+  ) => {
     const { getById } = new APIClient<T>(this.endpiont);
 
     return useQuery({
       queryKey: queryKey,
-      queryFn: () => getById(id),
+      queryFn: () => getById(id, config),
     });
   };
 
