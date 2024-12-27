@@ -15,6 +15,7 @@ const BookDetailPage = () => {
     ["overviewCard", "requests", "book", `${id}`],
     "Resquest Submitted."
   );
+  console.log(currentUser);
   const handleRequest = () => {
     if (currentUser) {
       mutate({ bookId: id as string });
@@ -53,7 +54,7 @@ const BookDetailPage = () => {
             <span>Book ID: </span>
             {data?.bookId}
           </div>
-          {!data?.isLegible && (
+          {currentUser && !data?.isLegible && (
             <p>
               The Request has been Submitted. You can get book After aprovel
               <span
@@ -66,10 +67,12 @@ const BookDetailPage = () => {
           )}
           <button
             onClick={handleRequest}
-            disabled={!data?.isLegible ? true : false}
+            disabled={currentUser ? (!data?.isLegible ? true : false) : false}
             className={
-              !data?.isLegible
-                ? "bg-[#9b9ed2] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
+              currentUser
+                ? data?.isLegible
+                  ? "bg-[#636AE8] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
+                  : "bg-[#9b9ed2] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
                 : "bg-[#636AE8] text-[#fff] rounded px-5 py-2 text-nowrap w-[130px]"
             }
           >

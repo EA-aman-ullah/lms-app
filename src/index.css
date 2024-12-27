@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @apply text-[62.5%];
+}
+
 body {
-  @apply pt-[55px];
+  @apply p-[1.5rem] bg-[#f0f2f5];
+}
+
+.td-padding td {
+  @apply p-[1rem];
 }

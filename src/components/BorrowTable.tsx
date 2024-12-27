@@ -23,10 +23,10 @@ const BorrowTable = () => {
     <table className="bg-slate-50">
       <thead>
         <tr className="border ">
-          <th></th>
+          <th>Photo</th>
           <th>Name</th>
           <th>Book ID</th>
-          <th></th>
+          <th>Photo</th>
           <th>Name</th>
           <th>Student ID</th>
           <th>Returnd</th>
@@ -37,7 +37,7 @@ const BorrowTable = () => {
         {data?.map((el, ind) => (
           <tr
             key={ind}
-            className="border border-collapse gap-2 even:bg-slate-50 bg-white "
+            className="border border-collapse gap-2 even:bg-slate-50 bg-white td-padding"
           >
             <td className="m-3">
               <img
@@ -57,8 +57,8 @@ const BorrowTable = () => {
             </td>
             <td>{el.student.name}</td>
             <td>{el.student.studentId}</td>
-            <td>
-              <span className="border border-blue-700 rounded-xl p-1 text-[#636AE8] ">
+            <td className="text-center">
+              <span className="border  border-blue-700 rounded-xl p-1 text-[#636AE8] ">
                 {el.isAssigned && !el.isReturned
                   ? "pending"
                   : el.isAssigned && el.isReturned

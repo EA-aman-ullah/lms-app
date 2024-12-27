@@ -14,7 +14,7 @@ const withPermission = <P extends object>(
       localStorage.getItem("currentUser") as string
     ) as CurrentUser;
 
-    if (currentUser.role === "admin" || currentUser.role === "librarian") {
+    if (currentUser?.role === "admin" || currentUser?.role === "librarian") {
       return <WrappedComponent {...props} />;
     }
   };

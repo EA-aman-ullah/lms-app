@@ -50,9 +50,9 @@ class httpService {
           toast.success(message, {
             position: "top-right",
             theme: "colored",
-            style: {
-              top: 60,
-            },
+            // style: {
+            //   top: 60,
+            // },
           });
           queryKey.forEach((el) =>
             queryClient.invalidateQueries({
@@ -66,9 +66,6 @@ class httpService {
             toast.error(`Message: ${error.response?.data}`, {
               position: "top-right",
               theme: "colored",
-              style: {
-                top: 60,
-              },
             });
           if (error instanceof Error) {
             console.error(error);
@@ -94,9 +91,6 @@ class httpService {
         toast.success(message, {
           position: "top-right",
           theme: "colored",
-          style: {
-            top: 60,
-          },
         });
         queryKey.forEach((el) =>
           queryClient.invalidateQueries({
@@ -110,9 +104,6 @@ class httpService {
           toast.error(`Message: ${error.response?.data}`, {
             position: "top-right",
             theme: "colored",
-            style: {
-              top: 60,
-            },
           });
         if (error instanceof Error) {
           console.error(error);

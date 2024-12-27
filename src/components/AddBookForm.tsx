@@ -15,11 +15,14 @@ interface Props {
   closeModal: () => void;
 }
 
-const AddBookFrom = ({ closeModal }: Props) => {
+const AddBookForm = ({ closeModal }: Props) => {
   const { usePost } = bookService;
   const { data, isValid, handleData, setValid } = useInputsData<Book>();
   const [selectedImage, setSelectedImage] = useState<File | null>();
-  const { mutate } = usePost(["books", "dbCard"], "Book Successfully Added");
+  const { mutate } = usePost(
+    ["books", "overviewCard"],
+    "Book Successfully Added"
+  );
 
   const formData = new FormData();
 
@@ -192,4 +195,4 @@ const AddBookFrom = ({ closeModal }: Props) => {
   );
 };
 
-export default AddBookFrom;
+export default AddBookForm;

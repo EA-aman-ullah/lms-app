@@ -1,24 +1,24 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "./Layout";
-import Books from "../pages/Books";
-import Users from "../pages/Users";
 import Borrows from "../pages/Borrows";
 import Dashboard from "../pages/dashboard";
 import Login from "../auth/Login";
 import SignUp from "../auth/SignUp";
 import PrivateRoute from "./PrivateRoute";
-import Home from "../pages/Home";
+import Books from "../pages/Books";
 import BookDetailPage from "../pages/BookDetailPage";
+import Profile from "../pages/Profile";
+import Requests from "../pages/Requests";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Navigate to="/home" replace /> },
-      { path: "/home", element: <Home /> },
+      { index: true, element: <Navigate to="/books" replace /> },
       { path: "/books", element: <Books /> },
       { path: "/books/:id", element: <BookDetailPage /> },
+      { path: "/requests", element: <Requests /> },
       { path: "/borrows", element: <Borrows /> },
     ],
   },
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
     children: [
-      { path: "/Students", element: <Users /> },
+      { path: "/profile", element: <Profile /> },
       { path: "/dashboard", element: <Dashboard /> },
     ],
   },

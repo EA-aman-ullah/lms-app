@@ -1,74 +1,53 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import BrandLogo from "../assets/images/BrandLogo.svg";
-import { axiosInstance } from "../services/api-client";
-import { CgMenuRound } from "react-icons/cg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { MdHome } from "react-icons/md";
+import { useLocation } from "react-router-dom";
+import AddBook from "./AddBook";
 
 const Navbar = () => {
-  const links = ["Home", "Dashboard", "Books", "Students"];
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const [isExpended, setExpended] = useState(false);
+  const title = location.pathname.split("/")[1];
+  const formattedTitle = title
+    ? title.charAt(0).toUpperCase() + title.slice(1)
+    : "";
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
 
-  const handleLogout = () => {
-    navigate("/");
-    localStorage.removeItem("auth-token");
-    localStorage.removeItem("currentUser");
-    axiosInstance.defaults.headers.common["Authorization"] = "";
-  };
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <nav className=" flex fixed top-0 w-full bg-[#FFF] z-30  px-6 py-1 md:py-0 items-center justify-between border-b border-gray-300">
-      <div className="flex items-center gap-2">
-        <img src={BrandLogo} alt="" />
-        <p className="text-3xl flex-1">LibraryIsight</p>
+    <div
+      id="modal"
+      className={`p-[1.5rem] flex rounded-full items-center justify-between mr-[1.5rem] w-[calc(100%-2.5rem)] md:w-[calc(100%-28.6rem)] fixed top-[1rem] z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-[#ffffffc4] backdrop-blur-lg shadow-lg"
+          : "bg-transparent"
+      }`}
+    >
+      <div>
+        <div className="flex items-center gap-2 text-[#52555b] text-[1.4rem] font-[600]">
+          <MdHome /> <span> / {formattedTitle}</span>
+        </div>
+        <div className="text-[1.6rem] font-bold text-[#344767]">
+          {formattedTitle}
+        </div>
       </div>
       <div>
-        <ul
-          className={
-            !isExpended
-              ? "translate-x-[-250px] md:translate-x-0 transition duration-500 ease-in-out  flex gap-2 fixed md:static left-0 top-[47px] w-[250px] md:w-fit px-[20px] pt-5 md:p-0 border-r md:border-0 h-full flex-col md:flex-row bg-[#FFF] border-separate z-50"
-              : " transition duration-500 ease-in-out flex gap-2 fixed md:static left-0 top-[47px] w-[250px] md:w-fit px-[20px] pt-5 md:p-0 border-r md:border-0 h-full flex-col md:flex-row bg-[#FFF] border-separate z-50"
-          }
-        >
-          {links.map((el, ind) => (
-            <Link key={ind} to={el.toLowerCase()}>
-              <li
-                className={
-                  el.toLowerCase() === location.pathname.split("/")[1]
-                    ? "p-3 shadow md:shadow-none border-b-4 border-[#636AE8] rounded text-[#636AE8] font-[700] cursor-pointer"
-                    : "p-3 cursor-pointer shadow md:shadow-none"
-                }
-              >
-                {el}
-              </li>
-            </Link>
-          ))}
-        </ul>
+        <AddBook />
       </div>
-      <div className="flex items-center gap-3">
-        <div>
-          {localStorage.getItem("auth-token") ? (
-            <button
-              onClick={handleLogout}
-              className="rounded bg-[#636AE8] text-[#fff] py-2 px-4 "
-            >
-              Logout
-            </button>
-          ) : (
-            <Link to={"/login"}>
-              <button className="rounded bg-[#636AE8]  text-[#fff] py-2 px-4 ">
-                Login
-              </button>
-            </Link>
-          )}
-        </div>
-        <div onClick={() => setExpended(!isExpended)} className=" md:hidden">
-          <CgMenuRound size={30} />
-        </div>
-      </div>
-    </nav>
+    </div>
   );
 };
 

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import Modal from "react-modal";
-import AddBookFrom from "./AddBookFrom";
+import AddBookForm from "./AddBookForm";
 import withPermission from "./withPermission";
-
+import { BiSolidBookAdd } from "react-icons/bi";
 const AddBook = () => {
   let subtitle: any;
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
-    Modal.setAppElement("#modaal");
+    Modal.setAppElement("#modal");
   }, []);
 
   function openModal() {
@@ -27,9 +27,12 @@ const AddBook = () => {
     <div>
       <button
         onClick={openModal}
-        className="bg-[#636AE8] text-white py-2 px-6 rounded-lg shadow-md hover:bg-[#4C52D7] focus:outline-none"
+        className="bg-[#3992ee] flex items-center gap-[1rem]  text-white py-[1rem] px-[2rem] rounded-full shadow-md hover:bg-[#3187dd] focus:outline-none"
       >
-        Add New Book
+        <div>
+          <BiSolidBookAdd size={25} />
+        </div>
+        <p className="text-[1.5rem] font-bold">Add Book</p>
       </button>
 
       <Modal
@@ -37,10 +40,10 @@ const AddBook = () => {
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         contentLabel="Example Modal"
-        className="fixed inset-0 flex items-center mt-[55px] justify-center z-50 bg-[#000000a0]"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+        className="fixed inset-0 flex items-center justify-center z-[9999999999] bg-[#000000a0]" // z-[9999] ensures modal is on top
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[9999]" // Same z-index for overlay to block the background
       >
-        <div className="bg-[#F2F2FD] p-6 rounded-lg max-w-lg w-full h-full overflow-y-auto  ">
+        <div className="bg-[#F2F2FD] p-6 rounded-lg max-w-lg w-full h-full overflow-y-auto">
           <div className="flex justify-between pb-3">
             <h2
               ref={(_subtitle) => (subtitle = _subtitle)}
@@ -51,14 +54,14 @@ const AddBook = () => {
             <div>
               <button
                 onClick={closeModal}
-                className="bg-[#636AE8] text-white py-2 px-20 rounded-lg shadow-md hover:bg-[#4C52D7] focus:outline-none"
+                className="bg-[#3992ee] text-white py-2 px-20 rounded-lg shadow-md hover:bg-[#2d7ac7] focus:outline-none"
               >
                 Close
               </button>
             </div>
           </div>
           <div className="mb-4 overflow-y-auto">
-            <AddBookFrom closeModal={closeModal} />
+            <AddBookForm closeModal={closeModal} />
           </div>
         </div>
       </Modal>
