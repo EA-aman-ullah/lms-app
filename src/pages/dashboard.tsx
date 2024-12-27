@@ -1,6 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import OverviewCard from "../components/OverviewCard";
-import RequestList from "../components/RequestList";
+import RequestList from "../components/RequestTable";
 import { useState } from "react";
 import BorrowTable from "../components/BorrowTable";
 
@@ -16,7 +16,9 @@ const dashboard = () => {
           <div>
             <RequestList />
           </div>
-          <div>{/* <BorrowTable /> */}</div>
+          <div>
+            <BorrowTable />
+          </div>
         </div>
       </div>
       <ToastContainer />

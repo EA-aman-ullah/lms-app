@@ -1,8 +1,20 @@
 import { Borrow } from "../entites/Borrow";
 import borrowService from "../services/borrow-service";
+import Badge from "./Badge";
 import Botton from "./Botton";
+import Table from "./Table";
 
 const BorrowTable = () => {
+  const columnHeading = [
+    "Photo",
+    "Name",
+    "Book ID",
+    "Photo",
+    "Name",
+    "Student ID",
+    "Assigned",
+    "Action",
+  ];
   const { data } = borrowService.useGetAll<Borrow[]>(["borrowsBooks"]);
   const { mutate } = borrowService.useUpdate(
     ["borrowsBooks", "overviewCard", "book"],
@@ -20,19 +32,7 @@ const BorrowTable = () => {
   if (data?.length === 0) return <p>No Book Borrowed</p>;
 
   return (
-    <table className="bg-slate-50">
-      <thead>
-        <tr className="border ">
-          <th>Photo</th>
-          <th>Name</th>
-          <th>Book ID</th>
-          <th>Photo</th>
-          <th>Name</th>
-          <th>Student ID</th>
-          <th>Returnd</th>
-          <th>Assigned</th>
-        </tr>
-      </thead>
+    <Table heading="Recent Borrows" thead={columnHeading}>
       <tbody>
         {data?.map((el, ind) => (
           <tr
@@ -58,27 +58,24 @@ const BorrowTable = () => {
             <td>{el.student.name}</td>
             <td>{el.student.studentId}</td>
             <td className="text-center">
-              <span className="border  border-blue-700 rounded-xl p-1 text-[#636AE8] ">
-                {el.isAssigned && !el.isReturned
-                  ? "pending"
-                  : el.isAssigned && el.isReturned
-                  ? "Returned"
-                  : "Not Assigned"}
-              </span>
-            </td>
-            <td>
-              <span className="border border-blue-700 rounded-xl p-1 text-[#636AE8] ">
-                {el.isAssigned ? "Assigned" : "Pending"}
-              </span>
+              <Badge condition={el.isAssigned}>{["Assigned", "Pending"]}</Badge>
             </td>
             <td>
               {!el.isAssigned && (
-                <Botton handleFunction={handleAsign} id={el._id}>
+                <Botton
+                  condition={el.isAssigned}
+                  handleFunction={handleAsign}
+                  id={el._id}
+                >
                   Assign
                 </Botton>
               )}
               {el.isAssigned && !el.isReturned && (
-                <Botton handleFunction={handleReturn} id={el._id}>
+                <Botton
+                  condition={el.isReturned}
+                  handleFunction={handleReturn}
+                  id={el._id}
+                >
                   Return
                 </Botton>
               )}
@@ -86,7 +83,7 @@ const BorrowTable = () => {
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
 

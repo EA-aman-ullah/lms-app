@@ -7,6 +7,7 @@ export interface Request {
     name: string;
     imageURL: string;
     bookId: string;
+    location: string;
   };
   student: {
     _id: string;

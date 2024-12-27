@@ -1,17 +1,33 @@
 import withPermission from "./withPermission";
+import { FiCheckCircle } from "react-icons/fi";
+import { RxCross2 } from "react-icons/rx";
+import { GoQuestion } from "react-icons/go";
 
 interface Props {
   handleFunction: (id: string) => void;
   id: string;
   children: string;
+  condition: boolean;
 }
 
-const Botton = ({ handleFunction, id, children }: Props) => {
+const Botton = ({ handleFunction, id, children, condition }: Props) => {
   return (
     <button
       onClick={() => handleFunction(id)}
-      className="bg-[#636AE8] text-white p-[6px] rounded-lg"
+      disabled={condition}
+      className={`${
+        condition ? "bg-[#55ae59]" : "bg-[#3992ee] hover:bg-[#3187dd]"
+      }   mx-auto flex items-center gap-[1rem] text-[1.2rem] text-white py-[1rem] font-[700] px-[1.5rem] rounded-md shadow-md  focus:outline-none`}
     >
+      {condition ? (
+        children === "Decline" ? (
+          <RxCross2 size={15} />
+        ) : (
+          <FiCheckCircle size={15} />
+        )
+      ) : (
+        <GoQuestion size={20} />
+      )}
       {children}
     </button>
   );
