@@ -1,24 +1,29 @@
 import { ToastContainer } from "react-toastify";
 import OverviewCard from "../components/OverviewCard";
 import RequestList from "../components/RequestTable";
-import { useState } from "react";
 import BorrowTable from "../components/BorrowTable";
+import { useState } from "react";
+import TableSeclectionBar from "../components/TableSeclectionBar";
 
 const dashboard = () => {
-  const [table, setTable] = useState("request");
+  const [selectedTable, setTable] = useState("request");
+
+  const handleSelectedTable = (selectedTable: string) => {
+    selectedTable === "request"
+      ? setTable(selectedTable)
+      : setTable(selectedTable);
+  };
 
   return (
     <>
-      <div className="flex flex-col gap-5 max-w-[1320px] mx-auto">
+      <div className="flex flex-col gap-[1.25rem] max-w-[1320px] mx-auto">
         <OverviewCard />
-
+        <TableSeclectionBar
+          handleSelectedTable={handleSelectedTable}
+          selectedTable={selectedTable}
+        />
         <div>
-          <div>
-            <RequestList />
-          </div>
-          <div>
-            <BorrowTable />
-          </div>
+          {selectedTable === "request" ? <RequestList /> : <BorrowTable />}
         </div>
       </div>
       <ToastContainer />

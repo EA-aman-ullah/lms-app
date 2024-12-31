@@ -1,15 +1,15 @@
 import { useState } from "react";
 
 const useInputsData = <T>() => {
-  const [data, setdata] = useState<T>({} as T);
+  const [inputData, setdata] = useState<T>({} as T);
   const [isValid, setValid] = useState(true);
 
-  const handleData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setdata({ ...data, [name]: value });
+    setdata({ ...inputData, [name]: value });
   };
 
-  return { data, handleData, isValid, setValid };
+  return {  inputData,  handleInputData, isValid, setValid };
 };
 
 export default useInputsData;

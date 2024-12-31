@@ -1,202 +1,186 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import post from "../services/signup-service";
-import avatar from "../assets/images/avatarDM.jpeg";
-import useInputsData from "../hooks/useInputsData";
-
-interface Person {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  name: string;
-  phone: string;
-}
+import useSignUp from "../hooks/useSignUp";
+import FormWrapper from "../components/FormWrapper";
+import { ToastContainer } from "react-toastify";
 
 const SignUp = () => {
-  const { data, isValid, handleData, setValid } = useInputsData<Person>();
-  const [selectedImage, setSelectedImage] = useState<File | null>();
-  let navigate = useNavigate();
-
-  const formData = new FormData();
-
-  formData.append("image", selectedImage as Blob);
-  formData.append("email", data.email);
-  formData.append("password", data.password);
-  formData.append("phone", data.phone);
-  formData.append("name", data.name);
-
-  const getToken = async () => {
-    try {
-      const user = await post(formData);
-
-      if (user) {
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const { response } = error;
-        console.log("Axios Error Response:", response);
-      } else {
-        console.log("Non-Axios Error:", error);
-      }
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (
-      /^[a-zA-Z ]{3,}$/.test(data.name) &&
-      data.phone?.length > 9 &&
-      selectedImage &&
-      data.confirmPassword === data.password &&
-      /^([^@\s]+)[@]((?:[-a-z0-9]+\.)+[a-z]{3,})$/i.test(data.email)
-    ) {
-      getToken();
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  };
+  const { inputData, isValid, handleSubmit, handleInputData } = useSignUp();
 
   return (
-    <form
-      className="mx-auto flex flex-col gap-4 h-svh justify-center items-center w-[50%] "
-      onSubmit={handleSubmit}
-    >
-      <div className="w-[180px] h-[180px] rounded-full overflow-hidden">
-        <img
-          className=" border w-full h-full object-cover"
-          src={
-            selectedImage ? URL.createObjectURL(selectedImage as Blob) : avatar
-          }
-          alt=""
-        />
-      </div>
-      <label
-        htmlFor="image"
-        className={
-          !selectedImage && !isValid
-            ? "cursor-pointer bg-[#F2F2FD] text-[#E8618C] rounded-[20px] p-2"
-            : "cursor-pointer bg-[#F2F2FD] text-[#636AE8] rounded-[20px] p-2"
-        }
+    <>
+      <FormWrapper
+        heading="Sign UP"
+        navigationLink="/login"
+        navigationButtonText="Sign In"
+        navigationPragraphText="Already have an account ?"
       >
-        {!selectedImage && !isValid ? "Pease Upload Image" : "Upload Image"}
-      </label>
-      <input
-        id="image"
-        type="file"
-        onChange={(e) => {
-          if (e.target.files) setSelectedImage(e.target.files[0]);
-        }}
-        name="image"
-        className="hidden"
-        draggable
-      />
-      <div className=" flex flex-col ">
-        <label htmlFor="email">Email</label>
-        <input
-          onChange={handleData}
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Email"
-          className="border flex-1"
-        />
-        {!data.email && !isValid && (
-          <p className="text-red-500">Enter Your Email</p>
-        )}
-        {!/^([^@\s]+)[@]((?:[-a-z0-9]+\.)+[a-z]{3,})$/i.test(data.email) &&
-          data.email &&
-          !isValid && (
-            <p className="text-red-500">
-              Formt must be like "email@example.com"
-            </p>
-          )}
-      </div>
-      <div className=" flex flex-col">
-        <label htmlFor="name">Name</label>
-        <input
-          onChange={handleData}
-          type="text"
-          id="name"
-          name="name"
-          placeholder="name"
-          className="border"
-        />
-        {!data.name && !isValid && (
-          <p className="text-red-500">Please Enter Your Name</p>
-        )}
-        {!(data.name === "") &&
-          !/^[a-zA-Z]{4,}$/.test(data.name) &&
-          !isValid && (
-            <p className="text-red-500">
-              Name must be at least 4 alphabets charecters
-            </p>
-          )}
-      </div>
-      <div className=" flex flex-col">
-        <label htmlFor="phone">Phone</label>
-        <input
-          onChange={handleData}
-          type="text"
-          id="phone"
-          name="phone"
-          placeholder="phone"
-          className="border"
-        />
-        {!data.phone && !isValid && (
-          <p className="text-red-500">Please Enter Phone Number</p>
-        )}
-        {!(data.phone === "") && data.phone?.length < 9 && !isValid && (
-          <p className="text-red-500">
-            The Number must be at least 10 charecters{" "}
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="password">Password</label>
-        <input
-          onChange={handleData}
-          type="text"
-          name="password"
-          id="password"
-          placeholder="Password"
-          className="border"
-        />
-        {!data.password && !isValid && (
-          <p className="text-red-500">Please Enter Password</p>
-        )}
-        {data.password?.length < 4 && !isValid && (
-          <p className="text-red-500">
-            The Number must be at least 4 Charecters long
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          onChange={handleData}
-          type="text"
-          name="confirmPassword"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          className="border"
-        />
-        {data.confirmPassword !== data.password && (
-          <p className="text-red-500">Confirm Password does not matched!</p>
-        )}
-      </div>
-      <div className="flex justify-center gap-1">
-        <button type="submit" className="border px-6 py-2">
-          Sign Up
-        </button>
-        <Link to={"/login"} className="border px-6 py-2">
-          Login
-        </Link>
-      </div>
-    </form>
+        <form
+          className="flex flex-col gap-[2rem] w-full text-[1.6rem] pt-[6rem]"
+          onSubmit={handleSubmit}
+        >
+          <div>
+            <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+              <label
+                htmlFor="email"
+                className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                  inputData.email?.length > 0 &&
+                  "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+                } `}
+              >
+                Email
+              </label>
+              <input
+                onChange={handleInputData}
+                type="text"
+                id="email"
+                name="email"
+                className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+              />
+            </div>
+            {!inputData.email && !isValid && (
+              <p className="text-accent text-[1.2rem]">Enter Your Email</p>
+            )}
+            {!/^([^@\s]+)[@]((?:[-a-z0-9]+\.)+[a-z]{2,})$/i.test(
+              inputData.email
+            ) &&
+              inputData.email &&
+              !isValid && (
+                <p className="text-accent text-[1.2rem]">
+                  Formt must be like "email@example.com"
+                </p>
+              )}
+          </div>
+          <div>
+            <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+              <label
+                htmlFor="name"
+                className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                  inputData.name?.length > 0 &&
+                  "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+                } `}
+              >
+                Name
+              </label>
+              <input
+                onChange={handleInputData}
+                type="text"
+                id="name"
+                name="name"
+                className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+              />
+            </div>
+            {!inputData.name && !isValid && (
+              <p className="text-accent text-[1.2rem]">
+                Please Enter Your Name
+              </p>
+            )}
+            {!(inputData.name === "") &&
+              !/^[a-zA-Z]{4,}$/.test(inputData.name) &&
+              !isValid && (
+                <p className="text-accent text-[1.2rem]">
+                  Name must be at least 4 alphabets charecters
+                </p>
+              )}
+          </div>
+          <div>
+            <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+              <label
+                htmlFor="phone"
+                className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                  inputData.phone?.length > 0 &&
+                  "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+                } `}
+              >
+                Phone
+              </label>
+              <input
+                onChange={handleInputData}
+                type="text"
+                id="phone"
+                name="phone"
+                className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+              />
+            </div>
+            {!inputData.phone && !isValid && (
+              <p className="text-accent text-[1.2rem]">
+                Please Enter Phone Number
+              </p>
+            )}
+            {!(inputData.phone === "") &&
+              inputData.phone?.length < 9 &&
+              !isValid && (
+                <p className="text-accent text-[1.2rem]">
+                  The Number must be at least 10 charecters{" "}
+                </p>
+              )}
+          </div>
+          <div>
+            <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+              <label
+                htmlFor="password"
+                className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                  inputData.password?.length > 0 &&
+                  "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+                } `}
+              >
+                Password
+              </label>
+              <input
+                onChange={handleInputData}
+                type="text"
+                name="password"
+                id="password"
+                className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+              />
+            </div>
+            {!inputData.password && !isValid && (
+              <p className="text-accent text-[1.2rem]">Please Enter Password</p>
+            )}
+            {inputData.password &&
+              !/^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[@#$%^&*]+).{8,16}$/.test(
+                inputData.password
+              ) &&
+              !isValid && (
+                <p className="text-accent text-[1.2rem]">
+                  Password must be 8-16 characters long, with an uppercase
+                  letter, a lowercase letter, a number, and a special character
+                  (@, #, $, etc.).
+                </p>
+              )}
+          </div>
+          <div>
+            <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+              <label
+                htmlFor="confirmPassword"
+                className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                  inputData.confirmPassword?.length > 0 &&
+                  "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+                } `}
+              >
+                Confirm Password
+              </label>
+              <input
+                onChange={handleInputData}
+                type="text"
+                name="confirmPassword"
+                id="confirmPassword"
+                className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+              />
+            </div>
+            {!isValid && inputData.confirmPassword !== inputData.password && (
+              <p className="text-accent text-[1.2rem]">
+                Confirm Password does not matched!
+              </p>
+            )}
+          </div>
+          <div className="flex-1 rounded-xl hover:shadow-xl bg-primary text-white  ">
+            <button type="submit" className="w-full px-6 py-2 ">
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </FormWrapper>
+      <ToastContainer autoClose={2000} />
+    </>
   );
 };
 

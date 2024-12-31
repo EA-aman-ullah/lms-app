@@ -13,7 +13,7 @@ const BookCard = () => {
       {data?.map((el) => (
         <div
           key={el._id}
-          className=" basis-[300px] flex-1  flex gap-4 border-2 border-[#E6E6E6] rounded-lg shadow-md p-4 transition-all hover:shadow-xl hover:scale-105"
+          className=" basis-[300px] flex-1  flex gap-4 border-2 border-border rounded-lg shadow-md p-4 transition-all hover:shadow-xl hover:scale-105"
         >
           <div className="w-[120px] flex-shrink-0 h-[100%] overflow-hidden rounded-lg">
             <img
@@ -23,16 +23,16 @@ const BookCard = () => {
             />
           </div>
           <div className="flex flex-col justify-between gap-2">
-            <h1 className="text-2xl font-semibold text-[#636AE8]">
-              Name: <span className="font-bold text-[#333]">{el.name}</span>
+            <h1 className="text-2xl font-semibold text-primary">
+              Name: <span className="font-bold text-headings">{el.name}</span>
             </h1>
-            <p className="text-lg text-[#555]">
+            <p className="text-lg text-headings">
               Author:{" "}
-              <span className="font-bold text-[#636AE8]">{el.autherName}</span>
+              <span className="font-bold text-primary">{el.autherName}</span>
             </p>
             <Link
               to={`/books/${el._id}`}
-              className="bg-[#636AE8] text-white py-2 px-4 rounded-lg text-lg font-semibold hover:bg-[#4C52D7] focus:outline-none transition-all"
+              className="bg-primary text-white py-2 px-4 rounded-lg text-lg font-semibold hover:bg-hoverPrimar focus:outline-none transition-all"
             >
               See Details
             </Link>

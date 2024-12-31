@@ -1,4 +1,5 @@
 import React from "react";
+import Badge from "./Badge";
 
 interface CurrentUser {
   _id: string;

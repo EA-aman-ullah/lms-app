@@ -27,12 +27,12 @@ const AddBook = () => {
     <div>
       <button
         onClick={openModal}
-        className="bg-[#3992ee] flex items-center gap-[1rem]  text-white py-[1rem] px-[2rem] rounded-full shadow-md hover:bg-[#3187dd] focus:outline-none"
+        className="bg-primary flex items-center text-nowrap gap-[.5rem] sm:gap-[1rem]  text-white py-[0.5rem] sm:py-[1rem] px-[1rem] sm:px-[2rem] rounded-full shadow-md hover:bg-hoverPrimary focus:outline-none"
       >
         <div>
           <BiSolidBookAdd size={25} />
         </div>
-        <p className="text-[1.5rem] font-bold">Add Book</p>
+        <p className=" text-[1.3rem] sm:text-[1.5rem] font-bold">Add Book</p>
       </button>
 
       <Modal
@@ -40,21 +40,21 @@ const AddBook = () => {
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         contentLabel="Example Modal"
-        className="fixed inset-0 flex items-center justify-center z-[9999999999] bg-[#000000a0]" // z-[9999] ensures modal is on top
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[9999]" // Same z-index for overlay to block the background
+        className="fixed inset-0 flex items-center justify-center z-[9999999999] bg-transBlack"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[9999]"
       >
-        <div className="bg-[#F2F2FD] p-6 rounded-lg max-w-lg w-full h-full overflow-y-auto">
+        <div className="bg-body p-6 rounded-lg max-w-lg w-full h-full overflow-y-auto">
           <div className="flex justify-between pb-3">
             <h2
               ref={(_subtitle) => (subtitle = _subtitle)}
-              className="text-[#636AE8] pt-1 text-xl font-semibold mb-4"
+              className="text-primary pt-1 text-xl font-semibold mb-4"
             >
               Enter Book Details
             </h2>
             <div>
               <button
                 onClick={closeModal}
-                className="bg-[#3992ee] text-white py-2 px-20 rounded-lg shadow-md hover:bg-[#2d7ac7] focus:outline-none"
+                className="bg-primary text-white py-2 px-20 rounded-lg shadow-md hover:bg-hoverPrimary focus:outline-none"
               >
                 Close
               </button>

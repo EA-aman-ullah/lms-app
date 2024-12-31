@@ -1,91 +1,66 @@
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import post from "../services/login-service";
-import { axiosInstance } from "../services/api-client";
-import { toast, ToastContainer } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
-import useInputsData from "../hooks/useInputsData";
-
-interface Person {
-  email: string;
-  password: string;
-}
+import { ToastContainer } from "react-toastify";
+import useLogin from "../hooks/useLogin";
+import FormWrapper from "../components/FormWrapper";
 
 const Login = () => {
-  const queryClient = useQueryClient();
-  let navigate = useNavigate();
-  const { data, handleData } = useInputsData<Person>();
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const user = await toast.promise(post(data), {
-        pending: "Logging....",
-        success: "Successfully Loge In",
-      });
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      if (localStorage.getItem("auth-token")) {
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${localStorage.getItem("auth-token")}`;
-        queryClient.invalidateQueries();
-
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(`${error.response?.data}`, {
-          position: "top-right",
-        });
-      } else {
-        console.log("Non-Axios Error:", error);
-      }
-    }
-  };
+  const { inputData, handleInputData, handleSubmit } = useLogin();
 
   return (
     <>
-      <form
-        className="mx-auto flex flex-col gap-4 justify-center items-center h-svh"
-        onSubmit={handleSubmit}
+      <FormWrapper
+        heading="Sign In"
+        navigationLink="/signup"
+        navigationButtonText="Sing UP"
+        navigationPragraphText="Don't have an account?"
       >
-        <div className=" flex flex-col">
-          <label htmlFor="email">Email</label>
-          <input
-            onChange={handleData}
-            type="text"
-            id="email"
-            name="email"
-            placeholder="Email"
-            className="border p-2 "
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="password">Password</label>
-          <input
-            onChange={handleData}
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            className="border p-2"
-          />
-        </div>
-        <div className="flex justify-center gap-1">
-          <button
-            type="submit"
-            className="rounded bg-[#636AE8] text-[#fff] px-6 py-2"
-          >
-            Login
-          </button>
-          <Link
-            to={"/signup"}
-            className="rounded bg-[#636AE8] text-[#fff] px-6 py-2"
-          >
-            Sing UP
-          </Link>
-        </div>
-      </form>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-[2rem] w-full text-[1.6rem] pt-[6rem]"
+        >
+          <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+            <label
+              htmlFor="email"
+              className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                inputData.email?.length > 0 &&
+                "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+              } `}
+            >
+              Email
+            </label>
+            <input
+              onChange={handleInputData}
+              type="text"
+              id="email"
+              name="email"
+              className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+            />
+          </div>
+
+          <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
+            <label
+              htmlFor="password"
+              className={`absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem] ${
+                inputData.password?.length > 0 &&
+                "top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem]"
+              } `}
+            >
+              Password
+            </label>
+            <input
+              onChange={handleInputData}
+              type="password"
+              name="password"
+              id="password"
+              className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
+            />
+          </div>
+          <div className="flex-1 rounded-xl hover:shadow-xl bg-primary text-white  ">
+            <button type="submit" className="w-full px-6 py-2 ">
+              Login
+            </button>
+          </div>
+        </form>
+      </FormWrapper>
       <ToastContainer autoClose={2000} />
     </>
   );

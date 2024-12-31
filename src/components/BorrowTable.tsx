@@ -2,6 +2,8 @@ import { Borrow } from "../entites/Borrow";
 import borrowService from "../services/borrow-service";
 import Badge from "./Badge";
 import Botton from "./Botton";
+import Image from "./Image";
+import Loader from "./Loader";
 import Table from "./Table";
 
 const BorrowTable = () => {
@@ -15,7 +17,9 @@ const BorrowTable = () => {
     "Assigned",
     "Action",
   ];
-  const { data } = borrowService.useGetAll<Borrow[]>(["borrowsBooks"]);
+  const { data, isLoading } = borrowService.useGetAll<Borrow[]>([
+    "borrowsBooks",
+  ]);
   const { mutate } = borrowService.useUpdate(
     ["borrowsBooks", "overviewCard", "book"],
     "Oppration Successfull"
@@ -29,16 +33,15 @@ const BorrowTable = () => {
     mutate([id, null]);
   };
 
+  if (isLoading) return <Loader />;
+
   if (data?.length === 0) return <p>No Book Borrowed</p>;
 
   return (
     <Table heading="Recent Borrows" thead={columnHeading}>
       <tbody>
         {data?.map((el, ind) => (
-          <tr
-            key={ind}
-            className="border border-collapse gap-2 even:bg-slate-50 bg-white td-padding"
-          >
+          <tr key={ind} className="border border-collapse gap-2 td-padding">
             <td className="m-3">
               <img
                 className="size-10 object-cover"
@@ -49,11 +52,7 @@ const BorrowTable = () => {
             <td className="">{el.book.name}</td>
             <td>{el.book.bookId}</td>
             <td>
-              <img
-                className="size-10 object-cover"
-                src={el.student.imageURL}
-                alt=""
-              />
+              <Image imageURL={el.student.imageURL} name={el.student.name} />
             </td>
             <td>{el.student.name}</td>
             <td>{el.student.studentId}</td>

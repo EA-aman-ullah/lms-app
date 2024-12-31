@@ -21,8 +21,8 @@ const RouteList = () => {
           <li
             className={
               el.title.toLowerCase() === location.pathname.split("/")[1]
-                ? " flex  items-center gap-[1rem] text-[1.6rem] px-[1.7rem] py-[1rem] bg-[#3992ee] rounded-xl  cursor-pointer"
-                : " flex  items-center gap-[1rem] text-[1.6rem] px-[1.7rem] py-[1rem] hover:bg-[#464648]  rounded-xl cursor-pointer"
+                ? " flex  items-center gap-[1rem] text-[1.6rem] px-[1.7rem] py-[1rem] bg-primary rounded-xl  cursor-pointer"
+                : " flex  items-center gap-[1rem] text-[1.6rem] px-[1.7rem] py-[1rem] hover:bg-hoverSecondary  rounded-xl cursor-pointer"
             }
           >
             <div>{el.icon}</div>

@@ -2,40 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #328bed;
+  --color-hoverPrimary: #0472e1;
+  --color-secondary: #333338;
+  --color-hoverSecondary: #464648;
+  --color-accent: #dc2265;
+  --color-pending: #55ae59;
+  --color-headings: #344767;
+  --color-textSecondary: #52555b;
+  --color-body: #f0f2f5;
+  --color-borderSecondary: #e4e4e6;
+  --color-borderPrimary: #69696f;
+  --color-transBlack: #000000a0;
+  --color-transWhite: #ffffffc4;
+}
+
 html {
   @apply text-[62.5%];
 }
 
 body {
-  @apply p-[1.5rem] bg-[#f0f2f5];
+  @apply bg-[#f0f2f5];
 }
 
-.td-padding td {
-  @apply p-[1rem] text-[#344767] text-center text-[1.4rem] font-[600] text-nowrap;
-}
+@layer utilities {
+  .td-padding td {
+    @apply p-[1rem] text-headings text-center text-[1.4rem] font-[600] text-nowrap;
+  }
 
-.td-padding td img {
-  @apply size-10 object-cover;
-}
+  .td-padding td img {
+    @apply size-10 object-cover mx-auto;
+  }
 
-.td-padding td p:first-child {
-  @apply text-[#344767] text-[1.4rem] font-[600] text-nowrap;
-}
+  .td-padding td p:first-child {
+    @apply text-headings text-[1.4rem] font-[600] text-nowrap;
+  }
 
-.td-padding td p:last-child {
-  @apply text-[1.2rem] text-nowrap font-[300] text-black;
-}
+  .td-padding td p:last-child {
+    @apply text-[1.2rem] text-nowrap font-[300] text-textSecondary;
+  }
 
-.th-padding th {
-  @apply pt-[8rem] pb-[1rem] px-[1rem] text-[#929292] text-[1.2rem];
-}
+  .th-padding th {
+    @apply pt-[8rem] pb-[1rem] px-[1rem] text-textSecondary text-[1.2rem];
+  }
 
-.th-padding th:first-child,
-.td-padding td:first-child {
-  @apply pl-[2rem] w-[7rem];
-}
+  .th-padding th:first-child,
+  .td-padding td:first-child {
+    @apply pl-[2rem] w-[7rem];
+  }
 
-.th-padding th:last-child,
-.td-padding td:last-child {
-  @apply pr-[2rem];
+  .th-padding th:last-child,
+  .td-padding td:last-child {
+    @apply pr-[2rem];
+  }
+
+  /* .form-inputs form div {
+    @apply flex flex-col relative border-[2px] border-borderSecondary rounded-xl focus-within:border-primary;
+  }
+
+  .input-label-transition input {
+    @apply p-[1rem] outline-none border-none focus:ring-0 rounded-xl;
+  }
+  .input-label-transition label {
+    @apply absolute left-[1rem] top-1/2 -translate-y-1/2 text-textSecondary text-[1.4rem] transition-all duration-300 group-focus-within:top-[-0.2rem] group-focus-within:text-[1.2rem] group-focus-within:text-primary group-focus-within:bg-white group-focus-within:px-[.5rem];
+  }
+  .has-value {
+    @apply top-[-0.2rem] bg-white px-[0.5rem] text-[1.18rem];
+  } */
 }

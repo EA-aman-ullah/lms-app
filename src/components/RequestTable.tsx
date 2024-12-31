@@ -2,6 +2,9 @@ import requestService from "../services/request-service";
 import Botton from "./Botton";
 import { Request } from "../entites/Request";
 import Table from "./Table";
+import Loader from "./Loader";
+import Image from "./Image";
+import Badge from "./Badge";
 type RequestId = Request["_id"];
 
 const RequestList = () => {
@@ -15,7 +18,7 @@ const RequestList = () => {
     "Student ID",
     "Status",
   ];
-  const { data } = requestService.useGetAll<Request[]>(["requests"]);
+  const { data, isLoading } = requestService.useGetAll<Request[]>(["requests"]);
   const { mutate } = requestService.useUpdate<RequestId>([
     "requests",
     "overviewCard",
@@ -25,6 +28,8 @@ const RequestList = () => {
   const handleApprove = (id: string) => {
     mutate([id, null]);
   };
+
+  if (isLoading) return <Loader />;
 
   if (data?.length === 0) return <p>No book Requested</p>;
 
@@ -43,7 +48,7 @@ const RequestList = () => {
             <td>{el.book.bookId}</td>
             <td>{el.book.location}</td>
             <td>
-              <img src={el.student.imageURL} alt="" />
+              <Image imageURL={el.student.imageURL} name={el.student.name} />
             </td>
             <td>{el.student.name}</td>
             <td>{el.student.studentId}</td>
@@ -55,6 +60,7 @@ const RequestList = () => {
               >
                 {el.isApproved ? "Approved" : "Approve"}
               </Botton>
+              <Badge condition={el.isApproved}>{["Approvd", "Pending"]}</Badge>
             </td>
           </tr>
         ))}

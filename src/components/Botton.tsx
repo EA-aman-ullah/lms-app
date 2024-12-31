@@ -16,7 +16,7 @@ const Botton = ({ handleFunction, id, children, condition }: Props) => {
       onClick={() => handleFunction(id)}
       disabled={condition}
       className={`${
-        condition ? "bg-[#55ae59]" : "bg-[#3992ee] hover:bg-[#3187dd]"
+        condition ? "bg-pending" : "bg-primary hover:bg-hoverPrimary"
       }   mx-auto flex items-center gap-[1rem] text-[1.2rem] text-white py-[1rem] font-[700] px-[1.5rem] rounded-md shadow-md  focus:outline-none`}
     >
       {condition ? (
