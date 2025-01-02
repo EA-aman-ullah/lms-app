@@ -1,9 +1,9 @@
 import useSignUp from "../hooks/useSignUp";
 import FormWrapper from "../components/FormWrapper";
-import { ToastContainer } from "react-toastify";
 
 const SignUp = () => {
-  const { inputData, isValid, handleSubmit, handleInputData } = useSignUp();
+  const { inputData, isValid, isLoading, handleSubmit, handleInputData } =
+    useSignUp();
 
   return (
     <>
@@ -173,13 +173,16 @@ const SignUp = () => {
             )}
           </div>
           <div className="flex-1 rounded-xl hover:shadow-xl bg-primary text-white  ">
-            <button type="submit" className="w-full px-6 py-2 ">
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="w-full px-6 py-2 "
+            >
               Sign Up
             </button>
           </div>
         </form>
       </FormWrapper>
-      <ToastContainer autoClose={2000} />
     </>
   );
 };

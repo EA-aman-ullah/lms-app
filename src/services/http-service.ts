@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import APIClient from "./api-client";
 import { AxiosError, AxiosRequestConfig } from "axios";
-import { toast } from "react-toastify";
 import { Request } from "../entites/Request";
+import useToast from "../hooks/useToast";
 
 class httpService {
   endpiont: string;
@@ -12,11 +12,11 @@ class httpService {
   }
 
   useGetAll = <T>(queryKey: string[], config: AxiosRequestConfig = {}) => {
-    const { getAll } = new APIClient<T>(this.endpiont);
+    const { getAll } = new APIClient(this.endpiont);
 
     return useQuery({
       queryKey: queryKey,
-      queryFn: () => getAll(config),
+      queryFn: () => getAll<T>(config),
     });
   };
 
@@ -25,11 +25,11 @@ class httpService {
     id: string,
     config: AxiosRequestConfig = {}
   ) => {
-    const { getById } = new APIClient<T>(this.endpiont);
+    const { getById } = new APIClient(this.endpiont);
 
     return useQuery({
       queryKey: queryKey,
-      queryFn: () => getById(id, config),
+      queryFn: () => getById<T>(id, config),
     });
   };
 
@@ -37,7 +37,9 @@ class httpService {
     queryKey: string[] = [""],
     message: string = "RESOURCE SUCCESSFULLY CREATED"
   ) => {
-    const { post } = new APIClient<FormData | T>(this.endpiont);
+    const { post } = new APIClient(this.endpiont);
+
+    const { showToast } = useToast();
 
     const queryClient = useQueryClient();
 
@@ -45,15 +47,9 @@ class httpService {
       {
         mutationFn: post,
 
-        onSuccess: (data) => {
-          console.log(data);
-          toast.success(message, {
-            position: "top-right",
-            theme: "colored",
-            // style: {
-            //   top: 60,
-            // },
-          });
+        onSuccess: () => {
+          showToast("success", message);
+
           queryKey.forEach((el) =>
             queryClient.invalidateQueries({
               queryKey: [el],
@@ -63,10 +59,7 @@ class httpService {
 
         onError: (error) => {
           if (error instanceof AxiosError)
-            toast.error(`Message: ${error.response?.data}`, {
-              position: "top-right",
-              theme: "colored",
-            });
+            showToast("error", `Message: ${error.response?.data}`);
           if (error instanceof Error) {
             console.error(error);
           }
@@ -79,19 +72,18 @@ class httpService {
     queryKey: string[] = [""],
     message: string = "Successfully Updated"
   ) => {
-    const { put } = new APIClient<FormData | T>(this.endpiont);
+    const { put } = new APIClient(this.endpiont);
+
+    const { showToast } = useToast();
 
     const queryClient = useQueryClient();
 
     return useMutation<Request, AxiosError | Error, [string, T | null]>({
       mutationFn: ([id, payload]) => put(id, payload),
 
-      onSuccess: (data) => {
-        console.log(data);
-        toast.success(message, {
-          position: "top-right",
-          theme: "colored",
-        });
+      onSuccess: () => {
+        showToast("success", message);
+
         queryKey.forEach((el) =>
           queryClient.invalidateQueries({
             queryKey: [el],
@@ -101,10 +93,7 @@ class httpService {
 
       onError: (error) => {
         if (error instanceof AxiosError)
-          toast.error(`Message: ${error.response?.data}`, {
-            position: "top-right",
-            theme: "colored",
-          });
+          showToast("error", `Message: ${error.response?.data}`);
         if (error instanceof Error) {
           console.error(error);
         }

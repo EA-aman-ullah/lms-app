@@ -15,7 +15,7 @@ const BookDetailPage = () => {
     ["overviewCard", "requests", "book", `${id}`],
     "Resquest Submitted."
   );
-  console.log(currentUser);
+
   const handleRequest = () => {
     if (currentUser) {
       mutate({ bookId: id as string });
@@ -80,7 +80,6 @@ const BookDetailPage = () => {
           </button>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

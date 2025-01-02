@@ -1,18 +1,22 @@
-import { ToastContainer } from "react-toastify";
 import OverviewCard from "../components/OverviewCard";
 import RequestList from "../components/RequestTable";
 import BorrowTable from "../components/BorrowTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TableSeclectionBar from "../components/TableSeclectionBar";
 
 const dashboard = () => {
   const [selectedTable, setTable] = useState("request");
-
   const handleSelectedTable = (selectedTable: string) => {
     selectedTable === "request"
       ? setTable(selectedTable)
       : setTable(selectedTable);
   };
+
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    console.log("data");
+  }, [data]);
 
   return (
     <>
@@ -26,7 +30,6 @@ const dashboard = () => {
           {selectedTable === "request" ? <RequestList /> : <BorrowTable />}
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

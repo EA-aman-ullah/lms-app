@@ -1,6 +1,5 @@
-import { Login } from "../entites/Login";
 import { APIAuthClient } from "./api-client";
 
-const { post } = new APIAuthClient<Login>("/api/auth");
+const { post } = new APIAuthClient("/api/auth");
 
 export default post;

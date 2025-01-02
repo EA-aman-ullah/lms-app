@@ -1,5 +1,4 @@
 import React from "react";
-import Badge from "./Badge";
 
 interface CurrentUser {
   _id: string;
@@ -15,9 +14,11 @@ const withPermission = <P extends object>(
       localStorage.getItem("currentUser") as string
     ) as CurrentUser;
 
-    if (currentUser?.role === "admin" || currentUser?.role === "librarian") {
-      return <WrappedComponent {...props} />;
-    }
+    const isDisabled = !(
+      currentUser?.role === "admin" || currentUser?.role === "librarian"
+    );
+
+    return <WrappedComponent {...props} isDisabled={isDisabled} />;
   };
 };
 

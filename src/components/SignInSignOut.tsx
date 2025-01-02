@@ -15,11 +15,11 @@ const SignInSignOut = () => {
   };
 
   return (
-    <div className="  text-[1.6rem] px-[1.7rem] py-[1rem] bg-primary hover:bg-hoverPrimary rounded-xl  cursor-pointer">
+    <div className="  text-[1.6rem]  bg-primary hover:bg-hoverPrimary rounded-xl  cursor-pointer">
       {token ? (
         <div
           onClick={() => handleLogging("/")}
-          className="flex  items-center gap-[1rem]"
+          className="flex  items-center gap-[1rem] px-[1.7rem] py-[1rem]"
         >
           <FaSignOutAlt size={20} color="white" />
           <p>Sign Out</p>
@@ -27,7 +27,7 @@ const SignInSignOut = () => {
       ) : (
         <div
           onClick={() => handleLogging("/login")}
-          className="flex  items-center gap-[1rem]"
+          className="flex  items-center gap-[1rem] px-[1.7rem] py-[1rem]"
         >
           <FaSignInAlt size={20} color="white" />
           <p>Sign In</p>

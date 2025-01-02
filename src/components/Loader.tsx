@@ -1,17 +1,13 @@
 const Loader = () => {
   return (
-    <div>
-      <button
-        type="button"
-        className="bg-primary flex items-center m-auto mt-10 p-3 rounded-lg text-white"
-        disabled
-      >
-        <svg
-          className="animate-spin h-5 w-5 mr-3  border-4 border-white border-t-borderSecondary rounded-full"
-          viewBox="0 0 24 24"
-        ></svg>
-        Loading...
-      </button>
+    <div className="text-[2rem] w-full h-full flex justify-center items-center ">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-primary mx-auto"></div>
+        <h2 className="text-zinc-900 dark:text-white mt-4">Loading...</h2>
+        <p className="text-secondary dark:text-zinc-400">
+          Your adventure is about to begin
+        </p>
+      </div>
     </div>
   );
 };

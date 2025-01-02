@@ -2,6 +2,9 @@ import axios from "axios";
 import post from "../services/signup-service";
 import useInputsData from "../hooks/useInputsData";
 import { useNavigate } from "react-router-dom";
+import { SingUp } from "../entites/Signup";
+import useToast from "./useToast";
+import { useState } from "react";
 
 interface Person {
   email: string;
@@ -10,9 +13,10 @@ interface Person {
   name: string;
   phone: string;
 }
-interface Data extends Omit<Person, "confirmPassword"> {}
 
 const useSignUp = () => {
+  const [isLoading, setLoading] = useState(false);
+  const { showToast, toastPromise } = useToast();
   const { inputData, isValid, handleInputData, setValid } =
     useInputsData<Person>();
   let navigate = useNavigate();
@@ -28,21 +32,27 @@ const useSignUp = () => {
 
   const getToken = async () => {
     try {
-      let data: Data = {
+      let data = {
         name: inputData.name,
         email: inputData.email,
         phone: inputData.phone,
         password: inputData.password,
       };
 
-      const user = await post(data);
+      setLoading(true);
+      const user = await toastPromise(post<SingUp>(data), {
+        pending: "Signing....",
+        success: "OTP sent to your email.",
+      });
 
       if (user) {
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        navigate("/dashboard");
+        setLoading(false);
+        navigate(`/signup/${user._id}`);
       }
     } catch (error) {
+      setLoading(false);
       if (axios.isAxiosError(error)) {
+        showToast("error", `${error.response?.data}`);
         const { response } = error;
         console.log("Axios Error Response:", response);
       } else {
@@ -70,6 +80,7 @@ const useSignUp = () => {
     }
   };
   return {
+    isLoading,
     inputData,
     isValid,
     // selectedImage,

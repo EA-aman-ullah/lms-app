@@ -1,6 +1,5 @@
-import { SingUp } from "../entites/Signup";
 import { APIAuthClient } from "./api-client";
 
-const { post } = new APIAuthClient<SingUp | FormData>("/api/users");
+const { post } = new APIAuthClient("/api/users/register");
 
 export default post;

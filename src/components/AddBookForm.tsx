@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useInputsData from "../hooks/useInputsData";
 import book from "../assets/images/book.jpeg";
-import { ToastContainer } from "react-toastify";
 import bookService from "../services/book-service";
 
 interface Book {
@@ -45,9 +44,7 @@ const AddBookForm = ({ closeModal }: Props) => {
     ) {
       mutate(formData);
       setValid(true);
-      setTimeout(() => {
-        closeModal();
-      }, 2200);
+      closeModal();
     } else {
       setValid(false);
     }
@@ -188,7 +185,6 @@ const AddBookForm = ({ closeModal }: Props) => {
           </div>
         </form>
       </div>
-      <ToastContainer autoClose={2000} />
     </>
   );
 };

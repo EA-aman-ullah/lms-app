@@ -4,7 +4,6 @@ import { Request } from "../entites/Request";
 import Table from "./Table";
 import Loader from "./Loader";
 import Image from "./Image";
-import Badge from "./Badge";
 type RequestId = Request["_id"];
 
 const RequestList = () => {
@@ -60,7 +59,6 @@ const RequestList = () => {
               >
                 {el.isApproved ? "Approved" : "Approve"}
               </Botton>
-              <Badge condition={el.isApproved}>{["Approvd", "Pending"]}</Badge>
             </td>
           </tr>
         ))}

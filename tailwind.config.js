@@ -17,10 +17,12 @@ export default {
         borderPrimary: "var(--color-borderPrimary)",
         transBlack: "var(--color-transBlack)",
         transWhite: "var( --color-transWhite)",
+        disable: "var( --color-primaryDisable)",
       },
       backgroundImage: {
-        "login": "url('./src/assets/images/bg-login.jpeg')",
+        login: "url('/src/assets/images/bg-login.jpeg')", // Notice the '/' at the start
       },
+
       screens: {
         sm: "450px",
       },

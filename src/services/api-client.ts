@@ -8,15 +8,15 @@ axiosInstance.defaults.headers.common[
   "Authorization"
 ] = `Bearer ${localStorage.getItem("auth-token")}`;
 
-export class APIAuthClient<T> {
+export class APIAuthClient {
   endpiont: string;
   constructor(endpiont: string) {
     this.endpiont = endpiont;
   }
 
-  post = (payload: T) => {
+  post = <T>(payload: T, id: string = "") => {
     return axiosInstance
-      .post<string | T>(this.endpiont, payload)
+      .post<T>(this.endpiont + "/" + id, payload)
       .then((res) => {
         const authHeader = res.headers["authorization"];
         const token = authHeader?.split(" ")[1];
@@ -32,22 +32,22 @@ export class APIAuthClient<T> {
   };
 }
 
-class APIClient<T> extends APIAuthClient<T> {
+class APIClient extends APIAuthClient {
   constructor(endpiont: string) {
     super(endpiont);
   }
 
-  getAll = (config: AxiosRequestConfig = {}) => {
+  getAll = <T>(config: AxiosRequestConfig = {}) => {
     return axiosInstance.get<T>(this.endpiont, config).then((res) => res.data);
   };
 
-  getById = (id: number | string, config: AxiosRequestConfig) => {
+  getById = <T>(id: number | string, config: AxiosRequestConfig = {}) => {
     return axiosInstance
       .get<T>(this.endpiont + "/" + id, config)
       .then((res) => res.data);
   };
 
-  put = (id: string, payload: T | null = null) => {
+  put = <T>(id: string, payload: T | null = null) => {
     return axiosInstance
       .put(this.endpiont + "/" + id, payload)
       .then((res) => res.data);

@@ -61,7 +61,6 @@ const Login = () => {
           </div>
         </form>
       </FormWrapper>
-      <ToastContainer autoClose={2000} />
     </>
   );
 };

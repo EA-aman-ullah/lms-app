@@ -8,13 +8,20 @@ interface Props {
   id: string;
   children: string;
   condition: boolean;
+  isDisabled?: boolean;
 }
 
-const Botton = ({ handleFunction, id, children, condition }: Props) => {
+const Botton = ({
+  handleFunction,
+  id,
+  children,
+  condition,
+  isDisabled,
+}: Props) => {
   return (
     <button
       onClick={() => handleFunction(id)}
-      disabled={condition}
+      disabled={isDisabled || condition}
       className={`${
         condition ? "bg-pending" : "bg-primary hover:bg-hoverPrimary"
       }   mx-auto flex items-center gap-[1rem] text-[1.2rem] text-white py-[1rem] font-[700] px-[1.5rem] rounded-md shadow-md  focus:outline-none`}

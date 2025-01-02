@@ -9,6 +9,7 @@ import Books from "../pages/Books";
 import BookDetailPage from "../pages/BookDetailPage";
 import Profile from "../pages/Profile";
 import Requests from "../pages/Requests";
+import Otp from "../auth/Otp";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
+  { path: "/signup/:id", element: <Otp /> },
   {
     element: <PrivateRoute />,
     children: [
