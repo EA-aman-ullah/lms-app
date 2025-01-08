@@ -1,4 +1,4 @@
-import { Borrow } from "../entites/Borrow";
+import { Request } from "../entites/Request";
 import borrowService from "../services/borrow-service";
 import Badge from "./Badge";
 import Botton from "./Botton";
@@ -16,7 +16,7 @@ const BorrowTable = () => {
     "Student ID",
     "Status",
   ];
-  const { data, isLoading } = borrowService.useGetAll<Borrow[]>([
+  const { data, isLoading } = borrowService.useGetAll<Request[]>([
     "borrowsBooks",
   ]);
   const { mutate } = borrowService.useUpdate(

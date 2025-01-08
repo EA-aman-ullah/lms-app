@@ -1,7 +1,7 @@
 import OverviewCard from "../components/OverviewCard";
 import RequestList from "../components/RequestTable";
 import BorrowTable from "../components/BorrowTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TableSeclectionBar from "../components/TableSeclectionBar";
 
 const dashboard = () => {

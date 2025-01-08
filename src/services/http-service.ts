@@ -4,30 +4,28 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import APIClient from "./api-client";
+import { APIClientType } from "./api-client";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { Request } from "../entites/Request";
 import useToast from "../hooks/useToast";
 import { FetchResponse } from "../entites/FetchResponse";
 
 class httpService {
-  endpiont: string;
+  APICliente: APIClientType;
 
-  constructor(endpiont: string) {
-    this.endpiont = endpiont;
+  constructor(APIClient: APIClientType) {
+    this.APICliente = APIClient
   }
 
   useGetAllWithPagination = <T>(
     queryKey: any[],
     config: AxiosRequestConfig = {}
   ) => {
-    const { getAll } = new APIClient(this.endpiont);
-
     return useInfiniteQuery({
       queryKey: queryKey,
       queryFn: ({ pageParam }) => {
         config.params.page = pageParam;
-        return getAll<FetchResponse<T>>(config);
+        return this.APICliente.getAll<FetchResponse<T>>(config);
       },
       getNextPageParam: (lastPage, allpages) => {
         return lastPage.pagination.hasNextPage
@@ -39,11 +37,9 @@ class httpService {
   };
 
   useGetAll = <T>(queryKey: any[], config: AxiosRequestConfig = {}) => {
-    const { getAll } = new APIClient(this.endpiont);
-
     return useQuery({
       queryKey: queryKey,
-      queryFn: () => getAll<T>(config),
+      queryFn: () => this.APICliente.getAll<T>(config),
     });
   };
 
@@ -52,11 +48,9 @@ class httpService {
     id: string,
     config: AxiosRequestConfig = {}
   ) => {
-    const { getById } = new APIClient(this.endpiont);
-
     return useQuery({
       queryKey: queryKey,
-      queryFn: () => getById<T>(id, config),
+      queryFn: () => this.APICliente.getById<T>(id, config),
     });
   };
 
@@ -64,15 +58,13 @@ class httpService {
     queryKey: any[] = [],
     message: string = "RESOURCE SUCCESSFULLY CREATED"
   ) => {
-    const { post } = new APIClient(this.endpiont);
-
     const { showToast } = useToast();
 
     const queryClient = useQueryClient();
 
     return useMutation<FormData | string | T, AxiosError | Error, FormData | T>(
       {
-        mutationFn: post,
+        mutationFn: this.APICliente.post,
 
         onSuccess: () => {
           showToast("success", message);
@@ -99,14 +91,12 @@ class httpService {
     queryKey: any[] = [],
     message: string = "Successfully Updated"
   ) => {
-    const { put } = new APIClient(this.endpiont);
-
     const { showToast } = useToast();
 
     const queryClient = useQueryClient();
 
     return useMutation<Request, AxiosError | Error, [string, T | null]>({
-      mutationFn: ([id, payload]) => put(id, payload),
+      mutationFn: ([id, payload]) => this.APICliente.put(id, payload),
 
       onSuccess: () => {
         showToast("success", message);

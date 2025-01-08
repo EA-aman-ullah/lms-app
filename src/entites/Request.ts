@@ -1,6 +1,11 @@
 export interface Request {
   _id: string;
   isApproved: boolean;
+  isAssigned: boolean;
+  isReturned: boolean;
+  dateAssign: Date;
+  dateReturn: Date;
+
   book: {
     _id: string;
     autherName: string;

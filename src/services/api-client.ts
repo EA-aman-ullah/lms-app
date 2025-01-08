@@ -60,4 +60,7 @@ class APIClient extends APIAuthClient {
   };
 }
 
+export type APIClientType = InstanceType<typeof APIClient>;
+
+
 export default APIClient;

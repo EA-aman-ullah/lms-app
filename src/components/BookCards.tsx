@@ -8,6 +8,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import userOpenRequestService from "../services/userOpenRequest-service";
+import CurrentUser from "../entites/CurrentUser";
+import { Request } from "../entites/Request";
 
 const BookCards = () => {
   const bookQuery = useSelector((state: RootState) => state.bookQuery);
@@ -16,7 +19,16 @@ const BookCards = () => {
       params: { search: bookQuery.search, onlyAvailable: true },
     });
 
-  console.log("object");
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as CurrentUser;
+
+  const { data: requestData } = userOpenRequestService.useGetById<Request[]>(
+    ["OpenRequests"],
+    currentUser._id
+  );
+
+  console.log(requestData);
 
   const fetchedBooksCount =
     data?.pages.reduce((total, page) => total + page.result?.length, 0) || 0;
@@ -27,6 +39,8 @@ const BookCards = () => {
         <Loader />
       </div>
     );
+
+  console.log();
 
   return (
     <InfiniteScroll
