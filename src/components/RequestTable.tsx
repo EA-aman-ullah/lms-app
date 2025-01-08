@@ -4,6 +4,7 @@ import { Request } from "../entites/Request";
 import Table from "./Table";
 import Loader from "./Loader";
 import Image from "./Image";
+import Badge from "./Badge";
 type RequestId = Request["_id"];
 
 const RequestList = () => {
@@ -17,6 +18,7 @@ const RequestList = () => {
     "Student ID",
     "Status",
   ];
+
   const { data, isLoading } = requestService.useGetAll<Request[]>(["requests"]);
   const { mutate } = requestService.useUpdate<RequestId>([
     "requests",
@@ -51,6 +53,9 @@ const RequestList = () => {
             </td>
             <td>{el.student.name}</td>
             <td>{el.student.studentId}</td>
+            <td>
+              <Badge condition={el.isApproved}>{["Approved", "Pending"]}</Badge>
+            </td>
             <td>
               <Botton
                 condition={el.isApproved}

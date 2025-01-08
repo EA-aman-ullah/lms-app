@@ -11,16 +11,9 @@ const dashboard = () => {
       ? setTable(selectedTable)
       : setTable(selectedTable);
   };
-
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    console.log("data");
-  }, [data]);
-
   return (
     <>
-      <div className="flex flex-col gap-[1.25rem] max-w-[1320px] mx-auto">
+      <div className="flex flex-col gap-[1.25rem] max-w-[1320px] mx-auto ">
         <OverviewCard />
         <TableSeclectionBar
           handleSelectedTable={handleSelectedTable}

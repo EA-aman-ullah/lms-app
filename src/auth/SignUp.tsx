@@ -113,7 +113,7 @@ const SignUp = () => {
                 </p>
               )}
           </div>
-          <div>
+          {/* <div>
             <div className="flex flex-col relative border-[2px] border-borderSecondary rounded-xl group focus-within:border-primary">
               <label
                 htmlFor="password"
@@ -171,7 +171,7 @@ const SignUp = () => {
                 Confirm Password does not matched!
               </p>
             )}
-          </div>
+          </div> */}
           <div className="flex-1 rounded-xl hover:shadow-xl bg-primary text-white  ">
             <button
               disabled={isLoading}

@@ -22,7 +22,9 @@ const Sidebar = ({ isExpended, handleExpended }: Props) => {
         >
           <RxCross2 size={20} color="white" />
         </div>
-        <Logo />
+        <div className="border-b border-borderPrimary pb-[1rem]">
+          <Logo />
+        </div>
         <RouteList />
       </div>
       <SignInSignOut />

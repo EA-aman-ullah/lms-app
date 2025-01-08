@@ -4,6 +4,8 @@ export default interface Book {
   autherName: string;
   bookId: string;
   location: string;
+  language: string;
+  description: string;
   numberInStock: number;
   returnableBooks: number;
   reservedNumber: number;
@@ -23,6 +25,8 @@ export default interface Book {
     studentImage: string;
   }[];
 }
+
+
 
 export interface AddBook {
   name: string;

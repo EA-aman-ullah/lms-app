@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import useLogin from "../hooks/useLogin";
 import FormWrapper from "../components/FormWrapper";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { inputData, handleInputData, handleSubmit } = useLogin();
@@ -54,6 +55,15 @@ const Login = () => {
               className="p-[1rem] outline-none border-none focus:ring-0 rounded-xl"
             />
           </div>
+          <p className="text-secondary text-[1.2rem]">
+            Forgot your password?
+            <Link to={"/forget-password"}>
+              <span className="font-bold text-primary text-nowrap">
+                {" "}
+                Forget Password
+              </span>
+            </Link>
+          </p>
           <div className="flex-1 rounded-xl hover:shadow-xl bg-primary text-white  ">
             <button type="submit" className="w-full px-6 py-2 ">
               Login

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import useToast from "./useToast";
-import { SingUp } from "../entites/Signup";
+import { Person } from "../entites/User";
 import axios from "axios";
 import useInputsData from "./useInputsData";
 import getById from "../services/resendOtp-service";
 import post from "../services/verifyOtp-service";
+import { useNavigate } from "react-router-dom";
 
 interface Otp {
   otp: string;
 }
 
 const useOTPVerification = () => {
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const { inputData, handleInputData } = useInputsData<Otp>();
@@ -19,7 +21,7 @@ const useOTPVerification = () => {
   const sendotp = async (id: string) => {
     setLoading(true);
     try {
-      await toastPromise(getById<SingUp>(id), {
+      await toastPromise(getById<Person>(id), {
         pending: "Sending....",
         success: "OTP sent to your email.",
       });
@@ -73,14 +75,15 @@ const useOTPVerification = () => {
     try {
       setLoading(true);
 
-      const user = await toastPromise(post<SingUp>(inputData as any, id), {
+      const user = await toastPromise(post<Person>(inputData as any, id), {
         pending: "verifying....",
-        success: "Registration Completed.",
+        success: "OTP verification successful.",
       });
 
       if (user) {
         localStorage.setItem("currentUser", JSON.stringify(user));
         setLoading(false);
+        navigate(`/set-password/${user._id}`);
       }
     } catch (error) {
       setLoading(false);

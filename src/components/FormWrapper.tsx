@@ -27,7 +27,10 @@ const FormWrapper = ({
             {children}
             <div className="flex gap-[0.3rem] text-[1.4rem] ">
               <p className="text-textSecondary">{navigationPragraphText}</p>
-              <Link to={navigationLink} className="font-bold text-primary">
+              <Link
+                to={navigationLink}
+                className="font-bold text-primary text-nowrap"
+              >
                 {navigationButtonText}
               </Link>
             </div>

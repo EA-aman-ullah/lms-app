@@ -18,6 +18,7 @@ export default {
         transBlack: "var(--color-transBlack)",
         transWhite: "var( --color-transWhite)",
         disable: "var( --color-primaryDisable)",
+        card: "var( --color-bookcard)",
       },
       backgroundImage: {
         login: "url('/src/assets/images/bg-login.jpeg')", // Notice the '/' at the start

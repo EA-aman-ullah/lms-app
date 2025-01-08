@@ -1,9 +1,11 @@
-import BookCard from "../components/BookCard";
+import BookCards from "../components/BookCards";
+import Navbar from "../components/Navbar";
 
 const Books = () => {
   return (
-    <div className="flex gap-10 flex-wrap m-5">
-      <BookCard />
+    <div className=" bg-gray-100">
+      <Navbar />
+      <BookCards />
     </div>
   );
 };

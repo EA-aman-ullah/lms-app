@@ -14,8 +14,7 @@ const BorrowTable = () => {
     "Photo",
     "Name",
     "Student ID",
-    "Assigned",
-    "Action",
+    "Status",
   ];
   const { data, isLoading } = borrowService.useGetAll<Borrow[]>([
     "borrowsBooks",

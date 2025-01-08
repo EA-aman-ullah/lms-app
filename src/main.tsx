@@ -7,6 +7,8 @@ import router from "./routes/routes.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastProvider } from "./provider/ToastProvider.tsx";
+import { Provider } from "react-redux";
+import store from "./store/store.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,10 +22,12 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <RouterProvider router={router} />
-      </ToastProvider>
-      <ReactQueryDevtools />
+      <Provider store={store}>
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
+        <ReactQueryDevtools />
+      </Provider>
     </QueryClientProvider>
   </StrictMode>
 );

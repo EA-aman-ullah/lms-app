@@ -1,10 +1,5 @@
 import React from "react";
-
-interface CurrentUser {
-  _id: string;
-  name: string;
-  role: string;
-}
+import CurrentUser from "../entites/CurrentUser";
 
 const withPermission = <P extends object>(
   WrappedComponent: React.ComponentType<P>
@@ -14,11 +9,12 @@ const withPermission = <P extends object>(
       localStorage.getItem("currentUser") as string
     ) as CurrentUser;
 
-    const isDisabled = !(
-      currentUser?.role === "admin" || currentUser?.role === "librarian"
-    );
+    // const isDisabled = !(
+    //   currentUser?.role === "admin" || currentUser?.role === "librarian"
+    // );
 
-    return <WrappedComponent {...props} isDisabled={isDisabled} />;
+    if (currentUser?.role === "admin" || currentUser?.role === "librarian")
+      return <WrappedComponent {...props} />;
   };
 };
 

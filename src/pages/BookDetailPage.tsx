@@ -1,28 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
-import book from "../services/book-service";
-import { ToastContainer } from "react-toastify";
-import request from "../services/request-service";
-import Book from "../entites/Books";
+import { useParams } from "react-router-dom";
+import useBook from "../hooks/useBook";
 
 const BookDetailPage = () => {
   const { id } = useParams();
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
-  const navigate = useNavigate();
-  const { data } = book.useGetById<Book>(["book", `${id}`], id as string, {
-    params: { studentId: currentUser?._id },
-  });
-  const { mutate } = request.usePost(
-    ["overviewCard", "requests", "book", `${id}`],
-    "Resquest Submitted."
-  );
-
-  const handleRequest = () => {
-    if (currentUser) {
-      mutate({ bookId: id as string });
-    } else {
-      navigate("/login");
-    }
-  };
+  const { data, currentUser, navigate, handleRequest } = useBook(id as string);
 
   return (
     <>
@@ -67,7 +48,7 @@ const BookDetailPage = () => {
           )}
           <button
             onClick={handleRequest}
-            disabled={currentUser ? (!data?.isLegible ? true : false) : false}
+            disabled={currentUser ? (data?.isLegible ? false : true) : false}
             className={
               currentUser
                 ? data?.isLegible

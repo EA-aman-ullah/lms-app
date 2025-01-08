@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #328bed;
+  --color-primary: #62aaf7;
   --color-hoverPrimary: #0472e1;
   --color-secondary: #333338;
   --color-hoverSecondary: #464648;
@@ -17,15 +17,16 @@
   --color-transBlack: #000000a0;
   --color-transWhite: #ffffffc4;
   --color-primaryDisable: #53a3f8e6;
+  --color-bookcard: #f9e3cb;
 }
 
 html {
   @apply text-[62.5%];
 }
 
-body {
-  @apply bg-[#f0f2f5];
-}
+/* body {
+  @apply 
+} */
 
 @layer utilities {
   .td-padding td {

@@ -8,6 +8,8 @@ interface Book {
   autherName: string;
   location: string;
   numberInStock: number;
+  language: string;
+  description: string;
 }
 
 interface Props {
@@ -30,15 +32,18 @@ const AddBookForm = ({ closeModal }: Props) => {
   formData.append("name", inputData.name);
   formData.append("autherName", inputData.autherName);
   formData.append("location", inputData.location);
+  formData.append("language", inputData.language);
+  formData.append("description", inputData.description);
   formData.append("numberInStock", inputData.numberInStock as any);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
-      /^[a-zA-Z _-]{4,}$/.test(inputData.name) &&
-      /^[a-zA-Z _-]{4,}$/.test(inputData.autherName) &&
-      /^[a-zA-Z _-]{4,}$/.test(inputData.location) &&
+      /^[a-zA-Z ._-]{4,}$/.test(inputData.name) &&
+      /^[a-zA-Z ._-]{4,}$/.test(inputData.autherName) &&
+      /^[a-zA-Z ._-]{4,}$/.test(inputData.location) &&
+      /^[a-zA-Z ._-]{3,}$/.test(inputData.language) &&
       inputData.numberInStock &&
       selectedImage
     ) {
@@ -103,7 +108,7 @@ const AddBookForm = ({ closeModal }: Props) => {
               <p className="text-red-500">Please Enter a Book Name</p>
             )}
             {!(inputData.name === "") &&
-              !/^[a-zA-Z _-]{4,}$/.test(inputData.name) &&
+              !/^[a-zA-Z ._-]{4,}$/.test(inputData.name) &&
               !isValid && (
                 <p className="text-red-500">
                   Name must be at least 4 characters
@@ -126,10 +131,33 @@ const AddBookForm = ({ closeModal }: Props) => {
               <p className="text-red-500">Please Enter an Author Name</p>
             )}
             {!(inputData.autherName === "") &&
-              !/^[a-zA-Z _-]{4,}$/.test(inputData.autherName) &&
+              !/^[a-zA-Z ._-]{4,}$/.test(inputData.autherName) &&
               !isValid && (
                 <p className="text-red-500">
                   Name must be at least 4 characters
+                </p>
+              )}
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="language" className="text-primary font-semibold">
+              Language
+            </label>
+            <input
+              onChange={handleInputData}
+              type="text"
+              id="language"
+              name="language"
+              placeholder="Enter Language"
+              className="border-2 border-primary rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-hoverPrimary"
+            />
+            {!inputData.language && !isValid && (
+              <p className="text-red-500">Please Enter an Language</p>
+            )}
+            {!(inputData.language === "") &&
+              !/^[a-zA-Z ._-]{3,}$/.test(inputData.language) &&
+              !isValid && (
+                <p className="text-red-500">
+                  Name must be at least 3 characters
                 </p>
               )}
           </div>
@@ -149,13 +177,14 @@ const AddBookForm = ({ closeModal }: Props) => {
               <p className="text-red-500">Please Enter a Location</p>
             )}
             {!(inputData.location === "") &&
-              !/^[a-zA-Z _-]{4,}$/.test(inputData.location) &&
+              !/^[a-zA-Z ._-]{4,}$/.test(inputData.location) &&
               !isValid && (
                 <p className="text-red-500">
                   Location must be at least 4 characters
                 </p>
               )}
           </div>
+
           <div className="flex flex-col">
             <label
               htmlFor="numberInStock"
@@ -174,6 +203,18 @@ const AddBookForm = ({ closeModal }: Props) => {
             {!inputData.numberInStock && !isValid && (
               <p className="text-red-500">Please Enter Quantity</p>
             )}
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="description" className="text-primary font-semibold">
+              Description
+            </label>
+            <textarea
+              onChange={handleInputData}
+              id="description"
+              name="description"
+              placeholder="Enter Description"
+              className="border-2 border-primary rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-hoverPrimary"
+            />
           </div>
           <div className="flex justify-center gap-4">
             <button

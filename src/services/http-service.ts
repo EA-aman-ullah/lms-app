@@ -1,8 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import APIClient from "./api-client";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { Request } from "../entites/Request";
 import useToast from "../hooks/useToast";
+import { FetchResponse } from "../entites/FetchResponse";
 
 class httpService {
   endpiont: string;
@@ -11,7 +17,28 @@ class httpService {
     this.endpiont = endpiont;
   }
 
-  useGetAll = <T>(queryKey: string[], config: AxiosRequestConfig = {}) => {
+  useGetAllWithPagination = <T>(
+    queryKey: any[],
+    config: AxiosRequestConfig = {}
+  ) => {
+    const { getAll } = new APIClient(this.endpiont);
+
+    return useInfiniteQuery({
+      queryKey: queryKey,
+      queryFn: ({ pageParam }) => {
+        config.params.page = pageParam;
+        return getAll<FetchResponse<T>>(config);
+      },
+      getNextPageParam: (lastPage, allpages) => {
+        return lastPage.pagination.hasNextPage
+          ? allpages.length + 1
+          : undefined;
+      },
+      initialPageParam: 1,
+    });
+  };
+
+  useGetAll = <T>(queryKey: any[], config: AxiosRequestConfig = {}) => {
     const { getAll } = new APIClient(this.endpiont);
 
     return useQuery({
@@ -21,7 +48,7 @@ class httpService {
   };
 
   useGetById = <T>(
-    queryKey: string[],
+    queryKey: any[],
     id: string,
     config: AxiosRequestConfig = {}
   ) => {
@@ -34,7 +61,7 @@ class httpService {
   };
 
   usePost = <T>(
-    queryKey: string[] = [""],
+    queryKey: any[] = [],
     message: string = "RESOURCE SUCCESSFULLY CREATED"
   ) => {
     const { post } = new APIClient(this.endpiont);
@@ -69,7 +96,7 @@ class httpService {
   };
 
   useUpdate = <T>(
-    queryKey: string[] = [""],
+    queryKey: any[] = [],
     message: string = "Successfully Updated"
   ) => {
     const { put } = new APIClient(this.endpiont);

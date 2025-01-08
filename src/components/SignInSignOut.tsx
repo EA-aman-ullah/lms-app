@@ -15,7 +15,7 @@ const SignInSignOut = () => {
   };
 
   return (
-    <div className="  text-[1.6rem]  bg-primary hover:bg-hoverPrimary rounded-xl  cursor-pointer">
+    <div className=" text-[1.3rem]  sm:text-[1.6rem] text-white text-nowrap   bg-primary hover:bg-hoverPrimary rounded-xl  cursor-pointer">
       {token ? (
         <div
           onClick={() => handleLogging("/")}

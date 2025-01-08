@@ -2,17 +2,9 @@ import axios from "axios";
 import post from "../services/signup-service";
 import useInputsData from "../hooks/useInputsData";
 import { useNavigate } from "react-router-dom";
-import { SingUp } from "../entites/Signup";
+import { Person } from "../entites/User";
 import useToast from "./useToast";
 import { useState } from "react";
-
-interface Person {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  name: string;
-  phone: string;
-}
 
 const useSignUp = () => {
   const [isLoading, setLoading] = useState(false);
@@ -40,14 +32,14 @@ const useSignUp = () => {
       };
 
       setLoading(true);
-      const user = await toastPromise(post<SingUp>(data), {
+      const user = await toastPromise(post<Person>(data as Person), {
         pending: "Signing....",
         success: "OTP sent to your email.",
       });
 
       if (user) {
         setLoading(false);
-        navigate(`/signup/${user._id}`);
+        navigate(`/otp/${user._id}`);
       }
     } catch (error) {
       setLoading(false);
@@ -67,10 +59,6 @@ const useSignUp = () => {
     if (
       /^[a-zA-Z ]{3,}$/.test(inputData.name) &&
       inputData.phone?.length > 9 &&
-      /^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[@#$%^&*]+).{8,16}$/.test(
-        inputData.password
-      ) &&
-      inputData.confirmPassword === inputData.password &&
       /^([^@\s]+)[@]((?:[-a-z0-9]+\.)+[a-z]{2,})$/i.test(inputData.email)
     ) {
       getToken();
