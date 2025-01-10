@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 import SignInSignOut from "./SignInSignOut";
 import BookSearch from "./BookSearch";
+import DashboardButton from "./DashboardButton";
+import CurrentUser from "../entites/CurrentUser";
+import BooksButton from "./BooksButton";
 
 const Navbar = () => {
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as CurrentUser;
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -34,7 +41,10 @@ const Navbar = () => {
       <div className="fixed left-[50%] transform -translate-x-1/2 top-[5.5rem] md:static md:-translate-x-0">
         <BookSearch />
       </div>
-      <SignInSignOut />
+      <div className="flex gap-[1rem]">
+        <BooksButton />
+        {currentUser ? <DashboardButton /> : <SignInSignOut />}
+      </div>
     </div>
   );
 };

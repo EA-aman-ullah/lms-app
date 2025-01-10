@@ -7,3 +7,13 @@ export interface Person {
   phone: string;
   message?: string;
 }
+
+export interface student {
+  name: string;
+  phone: string;
+  studentId: string;
+  imageURL: string;
+  studentWithBorrowed: number;
+  overdueBooks: number;
+  lastBookReturnDate: string;
+}

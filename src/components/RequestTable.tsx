@@ -1,5 +1,5 @@
 import requestService from "../services/request-service";
-import Botton from "./Botton";
+import TableBotton from "./TableBotton";
 import { Request } from "../entites/Request";
 import Table from "./Table";
 import Loader from "./Loader";
@@ -24,6 +24,7 @@ const RequestList = () => {
     "requests",
     "overviewCard",
     "borrowsBooks",
+    "OpenRequests",
   ]);
 
   const handleApprove = (id: string) => {
@@ -57,13 +58,13 @@ const RequestList = () => {
               <Badge condition={el.isApproved}>{["Approved", "Pending"]}</Badge>
             </td>
             <td>
-              <Botton
+              <TableBotton
                 condition={el.isApproved}
                 handleFunction={handleApprove}
                 id={el._id}
               >
                 {el.isApproved ? "Approved" : "Approve"}
-              </Botton>
+              </TableBotton>
             </td>
           </tr>
         ))}

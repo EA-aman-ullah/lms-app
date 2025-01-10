@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 import book from "../services/book-service";
 import Book from "../entites/Books";
-import BookRequest from "./BookRequest";
+import BookRequest from "../components/BookRequest";
 import { MdOutlineLanguage } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -12,7 +12,7 @@ import userOpenRequestService from "../services/userOpenRequest-service";
 import CurrentUser from "../entites/CurrentUser";
 import { Request } from "../entites/Request";
 
-const BookCards = () => {
+const BooksPage = () => {
   const bookQuery = useSelector((state: RootState) => state.bookQuery);
   const { data, isLoading, fetchNextPage, hasNextPage } =
     book.useGetAllWithPagination<Book[]>(["books", bookQuery], {
@@ -25,10 +25,14 @@ const BookCards = () => {
 
   const { data: requestData } = userOpenRequestService.useGetById<Request[]>(
     ["OpenRequests"],
-    currentUser._id
+    currentUser?._id
   );
 
-  console.log(requestData);
+  let notDisabled = true;
+
+  if (requestData) {
+    notDisabled = requestData.length < 5 ? true : false;
+  }
 
   const fetchedBooksCount =
     data?.pages.reduce((total, page) => total + page.result?.length, 0) || 0;
@@ -53,13 +57,13 @@ const BookCards = () => {
         </div>
       }
     >
-      <div className="flex gap-10 flex-wrap justify-center max-w-[132rem] mx-auto py-[14rem] md:py-[8rem]">
+      <div className="flex gap-10 flex-wrap justify-center max-w-[132rem] min-h-[100vh] mx-auto py-[14rem] md:py-[8rem]">
         {data?.pages.map((page, index) => (
           <React.Fragment key={index}>
             {page.result?.map((el) => (
               <div
                 key={el._id}
-                className=" basis-[25rem] flex flex-col  justify-between bg-card   transition-all shadow-2xl overflow-hidden "
+                className=" basis-[25rem] h-fit flex flex-col  justify-between bg-card   transition-all shadow-2xl overflow-hidden "
               >
                 <div className="px-[8rem] py-[3rem] h-[20rem] bg-card">
                   <Link to={`/books/${el._id}`}>
@@ -71,7 +75,13 @@ const BookCards = () => {
                   </Link>
                 </div>
                 <div className="flex flex-col justify-between gap-[1rem] px-[1rem] pt-[3rem] pb-[1rem] bg-white">
-                  <BookRequest bookId={el._id} />
+                  {
+                    <BookRequest
+                      userOpenRequest={requestData}
+                      bookId={el._id}
+                    />
+                  }
+
                   <h1 className="text-2xl font-semibold text-primary">
                     <span className="font-bold text-[#76515a]">{el.name}</span>
                   </h1>
@@ -91,4 +101,4 @@ const BookCards = () => {
   );
 };
 
-export default BookCards;
+export default BooksPage;

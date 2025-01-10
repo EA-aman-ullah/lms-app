@@ -5,13 +5,13 @@ const useRequest = (id: string) => {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
   const { mutate } = request.usePost(
-    ["overviewCard", "requests", "book", `${id}`],
+    ["overviewCard", "OpenRequests", "requests", "book", `${id}`],
     "Resquest Submitted."
   );
 
   const handleRequest = () => {
     if (currentUser) {
-      mutate({ bookId: id  });
+      mutate({ bookId: id });
     } else {
       navigate("/login");
     }

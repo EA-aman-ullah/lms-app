@@ -1,7 +1,7 @@
 import { Request } from "../entites/Request";
 import borrowService from "../services/borrow-service";
 import Badge from "./Badge";
-import Botton from "./Botton";
+import TableBotton from "./TableBotton";
 import Image from "./Image";
 import Loader from "./Loader";
 import Table from "./Table";
@@ -20,7 +20,7 @@ const BorrowTable = () => {
     "borrowsBooks",
   ]);
   const { mutate } = borrowService.useUpdate(
-    ["borrowsBooks", "overviewCard", "book"],
+    ["borrowsBooks", "OpenRequests", "overviewCard", "book"],
     "Oppration Successfull"
   );
 
@@ -60,22 +60,22 @@ const BorrowTable = () => {
             </td>
             <td>
               {!el.isAssigned && (
-                <Botton
+                <TableBotton
                   condition={el.isAssigned}
                   handleFunction={handleAsign}
                   id={el._id}
                 >
                   Assign
-                </Botton>
+                </TableBotton>
               )}
               {el.isAssigned && !el.isReturned && (
-                <Botton
+                <TableBotton
                   condition={el.isReturned}
                   handleFunction={handleReturn}
                   id={el._id}
                 >
                   Return
-                </Botton>
+                </TableBotton>
               )}
             </td>
           </tr>

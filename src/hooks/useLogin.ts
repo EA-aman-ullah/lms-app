@@ -1,7 +1,6 @@
 import axios from "axios";
 import post from "../services/login-service";
 import { axiosInstance } from "../services/api-client";
-import { useQueryClient } from "@tanstack/react-query";
 import useInputsData from "../hooks/useInputsData";
 import { useNavigate } from "react-router-dom";
 import useToast from "./useToast";
@@ -12,7 +11,6 @@ interface Person {
 }
 
 const useLogin = () => {
-  const queryClient = useQueryClient();
   const { toastPromise, showToast } = useToast();
   let navigate = useNavigate();
   const { inputData, handleInputData } = useInputsData<Person>();
@@ -29,7 +27,6 @@ const useLogin = () => {
         axiosInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${localStorage.getItem("auth-token")}`;
-        queryClient.invalidateQueries();
         navigate("/dashboard", { state: { showToast: true } });
       }
     } catch (error) {

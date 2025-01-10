@@ -1,9 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../services/api-client";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SignInSignOut = () => {
+  const queryClient = useQueryClient();
+  const location = useLocation();
   const navigate = useNavigate();
+  const dashboardsLocations = ["dashboard", "requests", "borrows", "profile"];
+
+  const isDashboard = dashboardsLocations.includes(
+    location.pathname.split("/")[1]
+  );
 
   const token = localStorage.getItem("auth-token");
 
@@ -12,6 +20,7 @@ const SignInSignOut = () => {
     localStorage.removeItem("auth-token");
     localStorage.removeItem("currentUser");
     axiosInstance.defaults.headers.common["Authorization"] = "";
+    queryClient.invalidateQueries();
   };
 
   return (
@@ -22,7 +31,7 @@ const SignInSignOut = () => {
           className="flex  items-center gap-[1rem] px-[1.7rem] py-[1rem]"
         >
           <FaSignOutAlt size={20} color="white" />
-          <p>Sign Out</p>
+          <p className={`${!isDashboard && "hidden sm:block"}`}>Sign Out</p>
         </div>
       ) : (
         <div
@@ -30,7 +39,7 @@ const SignInSignOut = () => {
           className="flex  items-center gap-[1rem] px-[1.7rem] py-[1rem]"
         >
           <FaSignInAlt size={20} color="white" />
-          <p>Sign In</p>
+          <p className={`${!isDashboard && "hidden sm:block"}`}>Sign In</p>
         </div>
       )}
     </div>

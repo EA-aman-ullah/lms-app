@@ -13,7 +13,7 @@ const dashboard = () => {
   };
   return (
     <>
-      <div className="flex flex-col gap-[1.25rem] max-w-[1320px] mx-auto ">
+      <div className="flex flex-col gap-[1.25rem] mx-auto ">
         <OverviewCard />
         <TableSeclectionBar
           handleSelectedTable={handleSelectedTable}

@@ -2,13 +2,18 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setSearch } from "../features/bookSearchSlice";
 import debounce from "../utils/debounce";
+import { useNavigate } from "react-router-dom";
 
 const BookSearch = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSearching = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearch({ search: event.target.value }));
   };
-  const debounceSearch = debounce(handleSearching);
+  const debounceSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    navigate("/books");
+    debounce(handleSearching)(event);
+  };
 
   return (
     <div className="relative">

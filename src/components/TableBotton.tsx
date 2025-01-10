@@ -11,7 +11,7 @@ interface Props {
   isDisabled?: boolean;
 }
 
-const Botton = ({
+const TableBotton = ({
   handleFunction,
   id,
   children,
@@ -40,4 +40,4 @@ const Botton = ({
   );
 };
 
-export default withPermission(Botton);
+export default withPermission(TableBotton);

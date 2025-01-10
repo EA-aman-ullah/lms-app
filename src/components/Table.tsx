@@ -8,7 +8,7 @@ interface Props {
 
 const Table = ({ heading, thead, children }: Props) => {
   return (
-    <div className="relative pt-[2rem] overflow-x-scroll ">
+    <div className="relative pt-[2rem] overflow-x-scroll transition-all ease-in-out duration-500 ">
       <h2 className="absolute top-[0rem] left-1/2 transform -translate-x-1/2 z-[33]  bg-primary  w-[calc(100%-4rem)] text-[1.6rem] font-bold text-white rounded-xl  px-[1rem] py-[2rem] text-start">
         {heading}
       </h2>
@@ -17,7 +17,9 @@ const Table = ({ heading, thead, children }: Props) => {
           <thead>
             <tr className="th-padding ">
               {thead.map((el, ind) => (
-                <th key={ind}>{el}</th>
+                <th key={ind} className="text-nowrap">
+                  {el}
+                </th>
               ))}
             </tr>
           </thead>
