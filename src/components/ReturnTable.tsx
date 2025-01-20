@@ -1,25 +1,25 @@
-import TableBotton from "./TableBotton";
 import { Request } from "../entites/Request";
-import Table from "./Table";
-import Loader from "./Loader";
-import Image from "./Image";
 import Badge from "./Badge";
+import TableBotton from "./TableBotton";
+import Image from "./Image";
+import Loader from "./Loader";
+import Table from "./Table";
 import { useState } from "react";
 import Pagination from "./pagination";
-import approveService from "../services/approve-service";
+import returnService from "../services/return-service";
 import {
-  APPROVE_BOOK,
-  ASSIGN_BOOK,
+  BORROWED_BOOK,
   DASHBOARD_CARDS,
+  RETURN_BOOK,
+  STUDENT_OPEN_REQUEST,
+  STUDENTS_WITH_BORROWED,
 } from "../constants/queryKeys";
-type RequestId = Request["_id"];
 
-const RequestList = () => {
+const ReturnTable = () => {
   const columnHeading = [
     "Photo",
     "Name",
     "Book ID",
-    "Location",
     "Photo",
     "Name",
     "Student ID",
@@ -27,17 +27,20 @@ const RequestList = () => {
   ];
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string>();
-
-  const { data, isLoading } = approveService.useGetAll<Request[]>(
-    [APPROVE_BOOK, page, search],
-    { params: { page: page, search: search } }
+  const { data, isLoading } = returnService.useGetAll<Request[]>(
+    [RETURN_BOOK, page, search],
+    { params: { page: page, search: search, sortByAssign: true } }
   );
-
-  const { mutate } = approveService.useUpdate<RequestId>([
-    APPROVE_BOOK,
-    ASSIGN_BOOK,
-    DASHBOARD_CARDS,
-  ]);
+  const { mutate } = returnService.useUpdate(
+    [
+      RETURN_BOOK,
+      BORROWED_BOOK,
+      STUDENTS_WITH_BORROWED,
+      STUDENT_OPEN_REQUEST,
+      DASHBOARD_CARDS,
+    ],
+    "Oppration Successfull"
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -53,7 +56,7 @@ const RequestList = () => {
     setPage(newPage);
   };
 
-  const handleApprove = (id: string) => {
+  const handleReturn = (id: string) => {
     mutate([id, null]);
   };
 
@@ -62,57 +65,60 @@ const RequestList = () => {
   return (
     <>
       <Table
+        search="Borrows"
         thead={columnHeading}
-        search="Request"
         handleSearching={handleSearch}
       >
         <tbody>
           {data?.result?.map((el, ind) => (
-            <tr key={ind} className="border td-padding border-collapse ">
-              <td>
-                <img src={el.book.imageURL} alt="" />
+            <tr key={ind} className="border border-collapse gap-2 td-padding">
+              <td className="m-3">
+                <img
+                  className="size-10 object-cover"
+                  src={el.book.imageURL}
+                  alt=""
+                />
               </td>
               <td>
                 <p>{el.book.name}</p>
                 <p>{el.book.autherName}</p>
               </td>
               <td>{el.book.bookId}</td>
-              <td>{el.book.location}</td>
               <td>
                 <div className="size-[4rem]">
-                  <Image imageURL={el.user?.imageURL} name={el.user?.name} />
+                  <Image imageURL={el.user.imageURL} name={el.user.name} />
                 </div>
               </td>
-              <td>{el.user?.name}</td>
-              <td>{el.user?.studentId}</td>
-              <td>
-                <Badge condition={el.isApproved}>
-                  {["Approved", "Pending"]}
+              <td>{el.user.name}</td>
+              <td>{el.user.studentId}</td>
+              <td className="text-center">
+                <Badge condition={el.isReturned}>
+                  {["Returned", "Pending"]}
                 </Badge>
               </td>
               <td>
                 <TableBotton
-                  condition={el.isApproved}
-                  handleFunction={handleApprove}
+                  condition={el.isReturned}
+                  handleFunction={handleReturn}
                   id={el._id}
                 >
-                  {el.isApproved ? "Approved" : "Approve"}
+                  {el.isReturned ? "Returned" : "Return"}
                 </TableBotton>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <div className="flex justify-center mt-[1rem]">
+      <div className="flex justify-center">
         <Pagination
           handleChange={handleChange}
           previousNext={previousNext}
-          currentPage={data?.pagination.currentPage}
-          totalPage={data?.pagination.totalPages}
+          currentPage={data?.pagination?.currentPage}
+          totalPage={data?.pagination?.totalPages}
         />
       </div>
     </>
   );
 };
 
-export default RequestList;
+export default ReturnTable;

@@ -3,7 +3,8 @@ module.exports = {
     "./src/**/*.{html,js,ts,jsx,tsx}", // Path to your source files
   ],
   plugins: [
-    require("tailwindcss"), // Use tailwindcss as plugin
-    require("autoprefixer"), // Use autoprefixer as plugin
+    require("tailwindcss"),
+    require("autoprefixer"),
+    require("tailwind-scrollbar"),
   ],
 };

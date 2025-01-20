@@ -22,12 +22,13 @@ export default {
       },
       backgroundImage: {
         login: "url('/src/assets/images/bg-login.jpeg')", // Notice the '/' at the start
+        profile: "url('/src/assets/images/profile.jpg')", // Notice the '/' at the start
       },
 
       screens: {
-        sm: "450px",
+        sm: "510px",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa6";
 import { SiGitbook } from "react-icons/si";
 import { MdDashboard } from "react-icons/md";
-import { TbBookUpload, TbBookDownload } from "react-icons/tb";
+import {TbBookDownload } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import CurrentUser from "../entites/CurrentUser";
 
@@ -10,8 +10,6 @@ const RouteList = () => {
   const links = [
     { title: "Dashboard", icon: <MdDashboard size={20} color="white" /> },
     { title: "Books", icon: <SiGitbook size={20} color="white" /> },
-    { title: "Requests", icon: <TbBookUpload size={20} color="white" /> },
-    { title: "Borrows", icon: <TbBookDownload size={20} color="white" /> },
     { title: "Profile", icon: <FaUser size={20} color="white" /> },
   ];
 
@@ -20,10 +18,15 @@ const RouteList = () => {
   ) as CurrentUser;
 
   if (currentUser?.role === "admin" || currentUser?.role === "librarian") {
-    links.splice(2, 0, {
-      title: "Students",
-      icon: <FaUser size={20} color="white" />,
-    });
+    links.splice(
+      2,
+      0,
+      {
+        title: "Students",
+        icon: <FaUser size={20} color="white" />,
+      },
+      { title: "Borrows", icon: <TbBookDownload size={20} color="white" /> }
+    );
   }
 
   return (

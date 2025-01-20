@@ -5,6 +5,6 @@ export default function debounce<T extends (...args: any[]) => void>(
 
   return function (...args: Parameters<T>) {
     clearTimeout(timer);
-    timer = setTimeout(() => func(...args), 700);
+    timer = setTimeout(() => func(...args), 1000);
   };
 }

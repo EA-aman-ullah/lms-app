@@ -14,7 +14,7 @@ const Layout = () => {
   if (location.pathname.split("/")[1] === "set-password") return <Outlet />;
 
   return (
-    <div className="relative p-[1rem] bg-gray-100 min-h-[100vh]">
+    <div className="relative p-[1rem] bg-body min-h-[100vh]">
       <Sidebar isExpended={isExpended} handleExpended={handleExpended} />
 
       <div className="md:ml-[26.6rem]">

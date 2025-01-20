@@ -1,4 +1,13 @@
-export default interface Book {
+import { Student } from "./User";
+
+export interface AddBook {
+  name: string;
+  autherName: string;
+  location: string;
+  numberInStock: number;
+}
+
+export interface Book {
   _id: string;
   name: string;
   autherName: string;
@@ -10,27 +19,25 @@ export default interface Book {
   returnableBooks: number;
   reservedNumber: number;
   imageURL: string;
-  dateAdd: Date;
-  isLegible: boolean;
-  requests: {
-    studentId: string;
-    studentName: string;
-    studentPhone: string;
-    studentImage: string;
-  }[];
-  borrows: {
-    studentId: string;
-    studentName: string;
-    studentPhone: string;
-    studentImage: string;
-  }[];
 }
 
+interface Students
+  extends Pick<Student, "_id" | "name" | "studentId" | "phone" | "imageURL"> {
+  dateBorrow: string;
+  dateReturn: string;
+}
 
-
-export interface AddBook {
-  name: string;
-  autherName: string;
-  location: string;
-  numberInStock: number;
+export interface BorrowedBooks
+  extends Pick<
+    Book,
+    | "_id"
+    | "name"
+    | "autherName"
+    | "bookId"
+    | "language"
+    | "returnableBooks"
+    | "imageURL"
+  > {
+  students: Students[];
+  lateStudentsQuantity: Student[];
 }

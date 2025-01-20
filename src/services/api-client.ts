@@ -1,7 +1,18 @@
 import axios, { AxiosRequestConfig } from "axios";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { Request } from "../entites/Request";
+import useToast from "../hooks/useToast";
+import { FetchResponse } from "../entites/FetchResponse";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
 });
 
 axiosInstance.defaults.headers.common[
@@ -33,8 +44,8 @@ export class APIAuthClient {
 }
 
 class APIClient extends APIAuthClient {
-  constructor(endpiont: string) {
-    super(endpiont);
+  constructor(endpoint: string) {
+    super(endpoint);
   }
 
   getAll = <T>(config: AxiosRequestConfig = {}) => {
@@ -60,7 +71,112 @@ class APIClient extends APIAuthClient {
   };
 }
 
-export type APIClientType = InstanceType<typeof APIClient>;
+export class APIClientWithCache extends APIClient {
+  constructor(endpoint: string) {
+    super(endpoint);
+  }
 
+  useGetAllWithPagination = <T>(
+    queryKey: any[],
+    config: AxiosRequestConfig = {}
+  ) => {
+    return useInfiniteQuery({
+      queryKey: queryKey,
+      queryFn: ({ pageParam }) => {
+        config.params.page = pageParam;
+        return this.getAll<FetchResponse<T>>(config);
+      },
+      getNextPageParam: (lastPage, allpages) => {
+        return lastPage.pagination.hasNextPage
+          ? allpages.length + 1
+          : undefined;
+      },
+      initialPageParam: 1,
+    });
+  };
+
+  useGetAll = <T>(queryKey: any[], config: AxiosRequestConfig = {}) => {
+    return useQuery({
+      queryKey: queryKey,
+      queryFn: () => this.getAll<FetchResponse<T>>(config),
+      placeholderData: keepPreviousData,
+    });
+  };
+
+  useGetById = <T>(
+    queryKey: any[],
+    id: string,
+    config: AxiosRequestConfig = {}
+  ) => {
+    return useQuery({
+      queryKey: queryKey,
+      queryFn: () => this.getById<T>(id, config),
+    });
+  };
+
+  usePost = <T>(
+    queryKey: any[] = [],
+    message: string = "RESOURCE SUCCESSFULLY CREATED"
+  ) => {
+    const { showToast } = useToast();
+
+    const queryClient = useQueryClient();
+
+    return useMutation<FormData | string | T, AxiosError | Error, FormData | T>(
+      {
+        mutationFn: this.post,
+
+        onSuccess: () => {
+          showToast("success", message);
+
+          queryKey.forEach((el) =>
+            queryClient.invalidateQueries({
+              queryKey: [el],
+            })
+          );
+        },
+
+        onError: (error) => {
+          if (error instanceof AxiosError)
+            showToast("error", `Message: ${error.response?.data}`);
+          if (error instanceof Error) {
+            console.error(error);
+          }
+        },
+      }
+    );
+  };
+
+  useUpdate = <T>(
+    queryKey: any[] = [],
+    message: string = "Successfully Updated"
+  ) => {
+    const { showToast } = useToast();
+
+    const queryClient = useQueryClient();
+
+    return useMutation<Request, AxiosError | Error, [string, T | null]>({
+      mutationFn: ([id, payload]) => this.put(id, payload),
+
+      onSuccess: () => {
+        showToast("success", message);
+
+        queryKey.forEach((el) =>
+          queryClient.invalidateQueries({
+            queryKey: [el],
+          })
+        );
+      },
+
+      onError: (error) => {
+        if (error instanceof AxiosError)
+          showToast("error", `Message: ${error.response?.data}`);
+        if (error instanceof Error) {
+          console.error(error);
+        }
+      },
+    });
+  };
+}
 
 export default APIClient;

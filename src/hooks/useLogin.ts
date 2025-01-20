@@ -27,7 +27,7 @@ const useLogin = () => {
         axiosInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${localStorage.getItem("auth-token")}`;
-        navigate("/dashboard", { state: { showToast: true } });
+        navigate("/dashboard");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

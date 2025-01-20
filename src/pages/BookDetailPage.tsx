@@ -1,11 +1,23 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useBook from "../hooks/useBook";
-import { MdArrowOutward } from "react-icons/md";
 import { GrFormView } from "react-icons/gr";
+import userOpenRequestService from "../services/userOpenRequest-service";
+import BookRequest from "../components/BookRequest";
+import { Request } from "../entites/Request";
+import { STUDENT_OPEN_REQUEST } from "../constants/queryKeys";
 
 const BookDetailPage = () => {
   const { id } = useParams();
-  const { data, currentUser, navigate, handleRequest } = useBook(id as string);
+  const navigate = useNavigate();
+  const { data, currentUser } = useBook(id as string);
+  const { data: requestData } = userOpenRequestService.useGetById<Request[]>(
+    [STUDENT_OPEN_REQUEST],
+    currentUser?._id
+  );
+
+  let disabled = requestData?.some((el) => {
+    return el.book === (id as any);
+  });
 
   return (
     <div className=" min-h-[100vh] pt-[14rem] md:pt-[10rem] relative">
@@ -31,22 +43,14 @@ const BookDetailPage = () => {
       </div>
       <div className="min-h-[50vh] pb-[4rem] bg-white w-[calc(100%-10%)] mx-auto sm:relative top-[-8rem] ">
         <div className="mt-[3rem] sm:mt-0 sm:ml-[55%] md:ml-[48%] mx-[2rem] p-[1rem] border-b-4  sm:min-h-[8rem] flex gap-[1rem] md:gap-[5rem] flex-wrap items-center relative z-20">
-          <button
-            onClick={handleRequest}
-            disabled={currentUser ? (data?.isLegible ? false : true) : false}
-            className={`text-white text-[1.6rem] rounded-full px-5 py-2 text-nowrap flex items-center gap-[.8rem]
-              ${
-                currentUser
-                  ? data?.isLegible
-                    ? "bg-hoverSecondary hover:bg-secondary"
-                    : "bg-gray-500"
-                  : "bg-hoverSecondary hover:bg-secondary"
-              }`}
+          <div
+            className={`text-white text-[1.6rem] bg-hoverSecondary rounded-full text-nowrap flex items-center gap-[.8rem] ${
+              !disabled && "hover:bg-secondary"
+            }`}
           >
-            <span>Send Request</span>
-            <MdArrowOutward size={20} />
-          </button>
-          {currentUser && !data?.isLegible && (
+            <BookRequest userOpenRequest={requestData} bookId={id as string} />
+          </div>
+          {disabled && (
             <div
               onClick={() => navigate("/dashboard")}
               className="flex items-center gap-[.5rem] bg-hoverSecondary hover:bg-secondary px-[1rem] py-[0.5rem] rounded-full text-white text-[1.6rem] cursor-pointer text-nowrap"

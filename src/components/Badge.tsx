@@ -5,7 +5,7 @@ interface Props {
 const Badge = ({ children, condition }: Props) => {
   return (
     <div
-      className={`inline-block text-[1rem] w-[6rem] text-center rounded-xl p-2 font-[600]  text-[#fff] ${
+      className={`inline-block text-[1rem]  text-center rounded-xl p-2 font-[600]  text-[#fff] ${
         condition ? "bg-pending" : "bg-accent"
       } `}
     >

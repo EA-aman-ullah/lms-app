@@ -1,0 +1,10 @@
+export let APPROVE_BOOK = "APPROVE_BOOK";
+export let ASSIGN_BOOK = "ASSIGN_BOOK";
+export let RETURN_BOOK = "RETURN_BOOK";
+export let BORROWED_BOOK = "BORROWED_BOOK";
+export let STUDENTS_WITH_BORROWED = "STUDENTS_WITH_BORROWED";
+export let STUDENT_OPEN_REQUEST = "STUDENT_OPEN_REQUEST";
+export let DASHBOARD_CARDS = "DASHBOARD_CARDS";
+export let BOOK = "BOOK";
+export let BOOKS = "BOOKS";
+export let ME = "ME";

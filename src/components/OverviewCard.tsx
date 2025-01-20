@@ -6,6 +6,7 @@ import { FaUsers } from "react-icons/fa6";
 import { RiBook3Fill } from "react-icons/ri";
 import { TbUsersGroup } from "react-icons/tb";
 import Loader from "./Loader";
+import { DASHBOARD_CARDS } from "../constants/queryKeys";
 
 const overviewCard = () => {
   const iconMap = [
@@ -24,7 +25,7 @@ const overviewCard = () => {
   ];
 
   const { useGetAll } = dashboardService;
-  const { data, isLoading } = useGetAll<DBCard[]>(["overviewCard"]);
+  const { data, isLoading } = useGetAll<DBCard[]>([DASHBOARD_CARDS]);
 
   if (isLoading) return <Loader />;
 

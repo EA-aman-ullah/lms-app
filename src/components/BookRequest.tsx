@@ -1,3 +1,4 @@
+import { MdArrowOutward } from "react-icons/md";
 import { Request } from "../entites/Request";
 import useRequest from "../hooks/useRequest";
 
@@ -9,7 +10,7 @@ const BookRequest = ({ bookId, userOpenRequest }: Props) => {
   const { handleRequest } = useRequest(bookId);
 
   let disabled = userOpenRequest?.some((el) => {
-    return el.book._id === bookId;
+    return el.book  === bookId as any;
   });
 
   let islimitExceeded = false;
@@ -22,6 +23,7 @@ const BookRequest = ({ bookId, userOpenRequest }: Props) => {
     <button
       onClick={handleRequest}
       disabled={disabled || islimitExceeded}
+      className="py-[0.5rem] px-[1rem] flex items-center gap-[1rem]"
       title={
         disabled
           ? "Request for this book already submitted"
@@ -29,8 +31,8 @@ const BookRequest = ({ bookId, userOpenRequest }: Props) => {
           ? "You can send only 5 book's request at time"
           : ""
       }
-      className="bg-card text-[1.8rem] text-green-700 py-[0.5rem] px-[2rem]  w-fit  font-semibold hover:bg-hoverPrimar focus:outline-none "
     >
+      {!disabled && !islimitExceeded && <MdArrowOutward size={20} />}
       {disabled
         ? "Requested"
         : islimitExceeded

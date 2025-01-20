@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import request from "../services/request-service";
+import requestService from "../services/request-service";
+import {
+  APPROVE_BOOK,
+  DASHBOARD_CARDS,
+  STUDENT_OPEN_REQUEST,
+} from "../constants/queryKeys";
 
 const useRequest = (id: string) => {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
-  const { mutate } = request.usePost(
-    ["overviewCard", "OpenRequests", "requests", "book", `${id}`],
+  const { mutate } = requestService.usePost(
+    [DASHBOARD_CARDS, APPROVE_BOOK, STUDENT_OPEN_REQUEST],
     "Resquest Submitted."
   );
 

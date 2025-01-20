@@ -5,19 +5,21 @@ export interface Request {
   isReturned: boolean;
   dateAssign: Date;
   dateReturn: Date;
-
   book: {
     _id: string;
-    autherName: string;
     name: string;
+    autherName: string;
+    language: string;
+    location: string;
     imageURL: string;
     bookId: string;
-    location: string;
   };
-  student: {
+
+  user: {
     _id: string;
     name: string;
     phone: string;
+    emai: string;
     studentId: string;
     imageURL: string;
   };

@@ -1,4 +1,3 @@
-import APIClient from "./api-client";
-import httpService from "./http-service";
+import { APIClientWithCache } from "./api-client";
 
-export default new httpService(new APIClient("/api/dashboard"));
+export default new APIClientWithCache("/api/dashboard");
