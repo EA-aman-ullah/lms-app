@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../services/api-client";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useQueryClient } from "@tanstack/react-query";
+import socket from "../services/socket";
 
 const SignInSignOut = () => {
   const queryClient = useQueryClient();
@@ -17,6 +18,7 @@ const SignInSignOut = () => {
 
   const handleLogging = (to: string) => {
     navigate(to);
+    socket.auth = {};
     localStorage.removeItem("auth-token");
     localStorage.removeItem("currentUser");
     axiosInstance.defaults.headers.common["Authorization"] = "";

@@ -4,6 +4,7 @@ import { axiosInstance } from "../services/api-client";
 import useInputsData from "../hooks/useInputsData";
 import { useNavigate } from "react-router-dom";
 import useToast from "./useToast";
+import socket from "../services/socket";
 
 interface Person {
   email: string;
@@ -24,9 +25,11 @@ const useLogin = () => {
       });
       localStorage.setItem("currentUser", JSON.stringify(user));
       if (localStorage.getItem("auth-token")) {
+        const token = localStorage.getItem("auth-token");
+        socket.auth = { token };
         axiosInstance.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${localStorage.getItem("auth-token")}`;
+        ] = `Bearer ${token}`;
         navigate("/dashboard");
       }
     } catch (error) {

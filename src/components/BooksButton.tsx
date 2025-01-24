@@ -7,7 +7,7 @@ const BooksButton = () => {
 
   return (
     <div
-      onClick={() => navigate("/books")}
+      onClick={() => navigate("/")}
       className={` ${
         location.pathname.split("/")[
           location.pathname.split("/").length - 1

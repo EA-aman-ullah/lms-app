@@ -5,16 +5,19 @@ import BookRequest from "../components/BookRequest";
 import { MdOutlineLanguage } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import userOpenRequestService from "../services/userOpenRequest-service";
 import CurrentUser from "../entites/CurrentUser";
 import { Request } from "../entites/Request";
 import { Book } from "../entites/Books";
-import { BOOKS, STUDENT_OPEN_REQUEST } from "../constants/queryKeys";
+import { BOOKS, STUDENT_OPEN_REQUESTS } from "../constants/queryKeys";
+import socket from "../services/socket";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BooksPage = () => {
   const bookQuery = useSelector((state: RootState) => state.bookQuery);
+  const queryClient = useQueryClient();
   const { data, isLoading, fetchNextPage, hasNextPage } =
     book.useGetAllWithPagination<Book[]>([BOOKS, bookQuery], {
       params: { search: bookQuery.search, onlyAvailable: true },
@@ -24,13 +27,29 @@ const BooksPage = () => {
     localStorage.getItem("currentUser") as string
   ) as CurrentUser;
 
-  const { data: requestData } = userOpenRequestService.useGetById<Request[]>(
-    [STUDENT_OPEN_REQUEST],
-    currentUser?._id
-  );
+  const { data: requestData, isFetching } = userOpenRequestService.useGetById<
+    Request[]
+  >([STUDENT_OPEN_REQUESTS], currentUser?._id);
 
   const fetchedBooksCount =
     data?.pages.reduce((total, page) => total + page.result?.length, 0) || 0;
+
+  useEffect(() => {
+    const handleReturnd = (data: any) => {
+      if (data)
+        queryClient.invalidateQueries({
+          queryKey: [STUDENT_OPEN_REQUESTS],
+        });
+    };
+
+    socket.on("returned", handleReturnd);
+    socket.on("request", handleReturnd);
+
+    return () => {
+      socket.off("returned", handleReturnd);
+      socket.off("request", handleReturnd);
+    };
+  }, []);
 
   if (isLoading)
     return (
@@ -38,8 +57,6 @@ const BooksPage = () => {
         <Loader />
       </div>
     );
-
-  console.log();
 
   return (
     <InfiniteScroll
@@ -72,6 +89,7 @@ const BooksPage = () => {
                 <div className="flex flex-col justify-between gap-[1rem] px-[1rem] pt-[3rem] pb-[1rem] bg-white">
                   <div className="bg-card text-[1.8rem] text-green-700  w-fit  font-semibold hover:bg-hoverPrimar focus:outline-none ">
                     <BookRequest
+                      isFetching={isFetching}
                       userOpenRequest={requestData}
                       bookId={el._id}
                     />

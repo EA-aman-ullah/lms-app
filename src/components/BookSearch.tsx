@@ -8,7 +8,7 @@ const BookSearch = () => {
   const navigate = useNavigate();
 
   const handleSearching = (event: React.ChangeEvent<HTMLInputElement>) => {
-    navigate("/books");
+    navigate("");
     dispatch(setSearch({ search: event.target.value }));
   };
 

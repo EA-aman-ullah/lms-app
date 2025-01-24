@@ -6,7 +6,7 @@ const Logo = () => {
 
   return (
     <div
-      onClick={() => navigate("/books")}
+      onClick={() => navigate("/")}
       className="flex items-center gap-2 cursor-pointer px-[1.7rem] py-[1rem] "
     >
       <img src={BrandLogo} alt="" />

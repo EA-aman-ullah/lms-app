@@ -11,7 +11,6 @@ import Requests from "../pages/Requests";
 import Otp from "../auth/Otp";
 import SetPassword from "../auth/SetPassword";
 import ForgetPassword from "../auth/ForgetPassword";
-import PublicPages from "../pages/PublicPages";
 import Books from "../pages/BooksPage";
 import StudentsPage from "../pages/StudentsPage";
 
@@ -19,20 +18,15 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    children: [{ index: true, element: <Navigate to="/books" replace /> }],
-  },
-  { path: "/login", element: <Login /> },
-  { path: "/forget-password", element: <ForgetPassword /> },
-  { path: "/signup", element: <SignUp /> },
-  { path: "/otp/:id", element: <Otp /> },
-  {
-    path: "/books",
-    element: <PublicPages />,
     children: [
       { index: true, element: <Books /> },
       { path: "/books/:id", element: <BookDetailPage /> },
     ],
   },
+  { path: "/login", element: <Login /> },
+  { path: "/forget-password", element: <ForgetPassword /> },
+  { path: "/signup", element: <SignUp /> },
+  { path: "/otp/:id", element: <Otp /> },
 
   {
     element: <PrivateRoute />,

@@ -4,20 +4,40 @@ import { GrFormView } from "react-icons/gr";
 import userOpenRequestService from "../services/userOpenRequest-service";
 import BookRequest from "../components/BookRequest";
 import { Request } from "../entites/Request";
-import { STUDENT_OPEN_REQUEST } from "../constants/queryKeys";
+import { STUDENT_OPEN_REQUESTS } from "../constants/queryKeys";
+import { useEffect } from "react";
+import socket from "../services/socket";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BookDetailPage = () => {
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data, currentUser } = useBook(id as string);
-  const { data: requestData } = userOpenRequestService.useGetById<Request[]>(
-    [STUDENT_OPEN_REQUEST],
-    currentUser?._id
-  );
+  const { data: requestData, isFetching } = userOpenRequestService.useGetById<
+    Request[]
+  >([STUDENT_OPEN_REQUESTS], currentUser?._id);
 
   let disabled = requestData?.some((el) => {
     return el.book === (id as any);
   });
+
+  useEffect(() => {
+    const handleReturnd = (data: any) => {
+      if (data)
+        queryClient.invalidateQueries({
+          queryKey: [STUDENT_OPEN_REQUESTS],
+        });
+    };
+
+    socket.on("returned", handleReturnd);
+    socket.on("request", handleReturnd);
+
+    return () => {
+      socket.off("returned", handleReturnd);
+      socket.off("request", handleReturnd);
+    };
+  }, []);
 
   return (
     <div className=" min-h-[100vh] pt-[14rem] md:pt-[10rem] relative">
@@ -48,7 +68,11 @@ const BookDetailPage = () => {
               !disabled && "hover:bg-secondary"
             }`}
           >
-            <BookRequest userOpenRequest={requestData} bookId={id as string} />
+            <BookRequest
+              isFetching={isFetching}
+              userOpenRequest={requestData}
+              bookId={id as string}
+            />
           </div>
           {disabled && (
             <div

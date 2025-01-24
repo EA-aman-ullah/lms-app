@@ -4,11 +4,11 @@ import { Me } from "../entites/User";
 import Image from "../components/Image";
 import uploadAvatarService from "../services/uploadAvatar-service";
 import {
-  APPROVE_BOOK,
-  ASSIGN_BOOK,
-  BORROWED_BOOK,
+  REQUESTS_APPROVEABLE,
+  REQUESTS_ASSIGNABLE,
+  BORROWED_BOOKS,
   ME,
-  RETURN_BOOK,
+  REQUESTS_RETURNABLE,
   STUDENTS_WITH_BORROWED,
 } from "../constants/queryKeys";
 
@@ -18,10 +18,10 @@ const ProfilePage = () => {
     [
       ME,
       STUDENTS_WITH_BORROWED,
-      BORROWED_BOOK,
-      APPROVE_BOOK,
-      ASSIGN_BOOK,
-      RETURN_BOOK,
+      BORROWED_BOOKS,
+      REQUESTS_APPROVEABLE,
+      REQUESTS_ASSIGNABLE,
+      REQUESTS_RETURNABLE,
     ],
     "Image Uploaded Successfully"
   );

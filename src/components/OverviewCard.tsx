@@ -5,6 +5,7 @@ import { TbBookDownload } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa6";
 import { RiBook3Fill } from "react-icons/ri";
 import { TbUsersGroup } from "react-icons/tb";
+import { FaFileCircleCheck } from "react-icons/fa6";
 import Loader from "./Loader";
 import { DASHBOARD_CARDS } from "../constants/queryKeys";
 
@@ -12,12 +13,14 @@ const overviewCard = () => {
   const iconMap = [
     <RiBook3Fill size={30} color="white" />,
     <MdPendingActions size={30} color="white" />,
+    <FaFileCircleCheck size={30} color="white" />,
     <TbBookDownload size={30} color="white" />,
     <TbUsersGroup size={30} color="white" />,
     <FaUsers size={30} color="white" />,
   ];
   const backgroundColors = [
     "bg-secondary",
+    "bg-accent",
     "bg-pending",
     "bg-accent",
     "bg-pending",

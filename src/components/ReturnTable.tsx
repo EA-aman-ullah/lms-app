@@ -4,16 +4,19 @@ import TableBotton from "./TableBotton";
 import Image from "./Image";
 import Loader from "./Loader";
 import Table from "./Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "./pagination";
 import returnService from "../services/return-service";
 import {
-  BORROWED_BOOK,
+  BORROWED_BOOKS,
   DASHBOARD_CARDS,
-  RETURN_BOOK,
-  STUDENT_OPEN_REQUEST,
+  REQUESTS_RETURNABLE,
+  STUDENT_OPEN_REQUESTS,
   STUDENTS_WITH_BORROWED,
 } from "../constants/queryKeys";
+import useToast from "../hooks/useToast";
+import { useQueryClient } from "@tanstack/react-query";
+import socket from "../services/socket";
 
 const ReturnTable = () => {
   const columnHeading = [
@@ -26,21 +29,25 @@ const ReturnTable = () => {
     "Status",
   ];
   const [page, setPage] = useState(1);
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState<string>();
-  const { data, isLoading } = returnService.useGetAll<Request[]>(
-    [RETURN_BOOK, page, search],
+  const { data, isLoading, isFetching } = returnService.useGetAll<Request[]>(
+    [REQUESTS_RETURNABLE, page, search],
     { params: { page: page, search: search, sortByAssign: true } }
   );
-  const { mutate } = returnService.useUpdate(
-    [
-      RETURN_BOOK,
-      BORROWED_BOOK,
-      STUDENTS_WITH_BORROWED,
-      STUDENT_OPEN_REQUEST,
-      DASHBOARD_CARDS,
-    ],
-    "Oppration Successfull"
-  );
+  const [isButtonFetching, setButtonFetching] = useState(isFetching);
+
+  // const { mutate } = returnService.useUpdate(
+  //   [
+  //     REQUESTS_RETURNABLE,
+  //     BORROWED_BOOKS,
+  //     STUDENTS_WITH_BORROWED,
+  //     STUDENT_OPEN_REQUESTS,
+  //     DASHBOARD_CARDS,
+  //   ],
+  //   "Oppration Successfull"
+  // );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -57,7 +64,27 @@ const ReturnTable = () => {
   };
 
   const handleReturn = (id: string) => {
-    mutate([id, null]);
+    setButtonFetching(true);
+    // mutate([id, null]);
+    socket.emit("return", { requestId: id }, (response: any) => {
+      if (response.success) {
+        [
+          REQUESTS_RETURNABLE,
+          BORROWED_BOOKS,
+          STUDENTS_WITH_BORROWED,
+          STUDENT_OPEN_REQUESTS,
+          DASHBOARD_CARDS,
+        ].forEach((el) => {
+          queryClient.invalidateQueries({
+            queryKey: [el],
+          });
+        });
+
+        showToast("success", response.message);
+      } else {
+        showToast("error", response.message);
+      }
+    });
   };
 
   if (isLoading) return <Loader />;
@@ -98,6 +125,7 @@ const ReturnTable = () => {
               </td>
               <td>
                 <TableBotton
+                  isFetching={isButtonFetching}
                   condition={el.isReturned}
                   handleFunction={handleReturn}
                   id={el._id}

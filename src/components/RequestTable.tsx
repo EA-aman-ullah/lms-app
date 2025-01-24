@@ -8,11 +8,14 @@ import { useState } from "react";
 import Pagination from "./pagination";
 import approveService from "../services/approve-service";
 import {
-  APPROVE_BOOK,
-  ASSIGN_BOOK,
+  REQUESTS_APPROVEABLE,
+  REQUESTS_ASSIGNABLE,
   DASHBOARD_CARDS,
 } from "../constants/queryKeys";
-type RequestId = Request["_id"];
+import socket from "../services/socket";
+import { useQueryClient } from "@tanstack/react-query";
+import useToast from "../hooks/useToast";
+// type RequestId = Request["_id"];
 
 const RequestList = () => {
   const columnHeading = [
@@ -27,17 +30,22 @@ const RequestList = () => {
   ];
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string>();
+  const { showToast } = useToast();
 
-  const { data, isLoading } = approveService.useGetAll<Request[]>(
-    [APPROVE_BOOK, page, search],
-    { params: { page: page, search: search } }
+  const queryClient = useQueryClient();
+  const { data, isLoading, isFetching } = approveService.useGetAll<Request[]>(
+    [REQUESTS_APPROVEABLE, page, search],
+    {
+      params: { page: page, search: search },
+    }
   );
+  const [isButtonFetching, setButtonFetching] = useState(isFetching);
 
-  const { mutate } = approveService.useUpdate<RequestId>([
-    APPROVE_BOOK,
-    ASSIGN_BOOK,
-    DASHBOARD_CARDS,
-  ]);
+  // const { mutate } = approveService.useUpdate<RequestId>([
+  //   REQUESTS_APPROVEABLE,
+  //   REQUESTS_ASSIGNABLE,
+  //   DASHBOARD_CARDS,
+  // ]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -54,7 +62,22 @@ const RequestList = () => {
   };
 
   const handleApprove = (id: string) => {
-    mutate([id, null]);
+    // mutate([id, null]);
+    setButtonFetching(true);
+    socket.emit("approve", { requestId: id }, (response: any) => {
+      if (response.success) {
+        [REQUESTS_APPROVEABLE, REQUESTS_ASSIGNABLE, DASHBOARD_CARDS].forEach(
+          (el) => {
+            queryClient.invalidateQueries({
+              queryKey: [el],
+            });
+          }
+        );
+        showToast("success", response.message);
+      } else {
+        showToast("error", response.message);
+      }
+    });
   };
 
   if (isLoading) return <Loader />;
@@ -92,6 +115,7 @@ const RequestList = () => {
               </td>
               <td>
                 <TableBotton
+                  isFetching={isButtonFetching}
                   condition={el.isApproved}
                   handleFunction={handleApprove}
                   id={el._id}

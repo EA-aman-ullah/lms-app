@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa6";
 import { SiGitbook } from "react-icons/si";
 import { MdDashboard } from "react-icons/md";
-import {TbBookDownload } from "react-icons/tb";
+import { TbBookDownload } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import CurrentUser from "../entites/CurrentUser";
 
@@ -32,7 +32,7 @@ const RouteList = () => {
   return (
     <ul className="flex flex-col py-[1.5rem] gap-[.5rem]">
       {links.map((el, ind) => (
-        <Link key={ind} to={el.title.toLowerCase()}>
+        <Link key={ind} to={el.title === "Books" ? "" : el.title.toLowerCase()}>
           <li
             className={
               el.title.toLowerCase() === location.pathname.split("/")[1]

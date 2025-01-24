@@ -7,7 +7,16 @@ import Table from "./Table";
 import { useState } from "react";
 import Pagination from "./pagination";
 import assignService from "../services/assign-service";
-import { ASSIGN_BOOK, BOOK, BORROWED_BOOK, DASHBOARD_CARDS, RETURN_BOOK, STUDENT_OPEN_REQUEST, STUDENTS_WITH_BORROWED } from "../constants/queryKeys";
+import {
+  REQUESTS_ASSIGNABLE,
+  BORROWED_BOOKS,
+  DASHBOARD_CARDS,
+  REQUESTS_RETURNABLE,
+  STUDENTS_WITH_BORROWED,
+} from "../constants/queryKeys";
+import socket from "../services/socket";
+import { useQueryClient } from "@tanstack/react-query";
+import useToast from "../hooks/useToast";
 
 const AssignTable = () => {
   const columnHeading = [
@@ -20,22 +29,26 @@ const AssignTable = () => {
     "Status",
   ];
   const [page, setPage] = useState(1);
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState<string>();
-  const { data, isLoading } = assignService.useGetAll<Request[]>(
-    [ASSIGN_BOOK, page, search],
+  const { data, isLoading, isFetching } = assignService.useGetAll<Request[]>(
+    [REQUESTS_ASSIGNABLE, page, search],
     { params: { page: page, search: search, sortByAssign: true } }
   );
-  const { mutate } = assignService.useUpdate(
-    [
-      ASSIGN_BOOK,
-      RETURN_BOOK,
-      BORROWED_BOOK,
-      STUDENTS_WITH_BORROWED,
-      STUDENT_OPEN_REQUEST,
-      DASHBOARD_CARDS,
-    ],
-    "Oppration Successfull"
-  );
+  const [isButtonFetching, setButtonFetching] = useState(isFetching);
+
+  // const { mutate } = assignService.useUpdate(
+  //   [
+  //     REQUESTS_ASSIGNABLE,
+  //     REQUESTS_RETURNABLE,
+  //     BORROWED_BOOKS,
+  //     STUDENTS_WITH_BORROWED,
+  //     DASHBOARD_CARDS,
+  //   ],
+  //   "Oppration Successfull"
+  // );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -52,7 +65,27 @@ const AssignTable = () => {
   };
 
   const handleAsign = (id: string) => {
-    mutate([`${id}`, null]);
+    setButtonFetching(true)
+    // mutate([`${id}`, null]);
+    socket.emit("assign", { requestId: id }, (response: any) => {
+      if (response.success) {
+        [
+          REQUESTS_ASSIGNABLE,
+          REQUESTS_RETURNABLE,
+          BORROWED_BOOKS,
+          STUDENTS_WITH_BORROWED,
+          DASHBOARD_CARDS,
+        ].forEach((el) => {
+          queryClient.invalidateQueries({
+            queryKey: [el],
+          });
+        });
+
+        showToast("success", response.message);
+      } else {
+        showToast("error", response.message);
+      }
+    });
   };
 
   if (isLoading) return <Loader />;
@@ -93,6 +126,7 @@ const AssignTable = () => {
               </td>
               <td>
                 <TableBotton
+                  isFetching={isButtonFetching}
                   condition={el.isAssigned}
                   handleFunction={handleAsign}
                   id={el._id}

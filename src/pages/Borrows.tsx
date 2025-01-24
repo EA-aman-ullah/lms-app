@@ -8,7 +8,7 @@ import Badge from "../components/Badge";
 import { MdAttachEmail } from "react-icons/md";
 import { BorrowedBooks } from "../entites/Books";
 import Pagination from "../components/pagination";
-import { BORROWED_BOOK } from "../constants/queryKeys";
+import { BORROWED_BOOKS } from "../constants/queryKeys";
 
 const Borrows = () => {
   const Theadings = [
@@ -27,7 +27,7 @@ const Borrows = () => {
   const [rowId, setRowId] = useState("");
 
   const { data } = borrowedBooksService.useGetAll<BorrowedBooks[]>(
-    [BORROWED_BOOK, page, search],
+    [BORROWED_BOOKS, page, search],
     { params: { page: page, search: search } }
   );
 
