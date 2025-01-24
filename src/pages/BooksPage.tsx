@@ -5,7 +5,7 @@ import BookRequest from "../components/BookRequest";
 import { MdOutlineLanguage } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import userOpenRequestService from "../services/userOpenRequest-service";
 import CurrentUser from "../entites/CurrentUser";

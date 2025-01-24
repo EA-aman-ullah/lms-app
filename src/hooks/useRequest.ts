@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import requestService from "../services/request-service";
+// import requestService from "../services/request-service";
 import {
   REQUESTS_APPROVEABLE,
   DASHBOARD_CARDS,
@@ -14,10 +14,10 @@ const useRequest = (id: string) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser") as string);
-  const { mutate } = requestService.usePost(
-    [DASHBOARD_CARDS, REQUESTS_APPROVEABLE, STUDENT_OPEN_REQUESTS],
-    "Resquest Submitted."
-  );
+  // const { mutate } = requestService.usePost(
+  //   [DASHBOARD_CARDS, REQUESTS_APPROVEABLE, STUDENT_OPEN_REQUESTS],
+  //   "Resquest Submitted."
+  // );
 
   const handleRequest = () => {
     if (currentUser) {
@@ -35,7 +35,7 @@ const useRequest = (id: string) => {
           );
 
           showToast("success", response.message);
-        } else{
+        } else {
           showToast("error", response.message);
         }
       });
