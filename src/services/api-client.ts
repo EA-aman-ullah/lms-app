@@ -95,6 +95,14 @@ export class APIClientWithCache extends APIClient {
     });
   };
 
+  useGetAllWithOutPagination = <T>(queryKey: any[], config: AxiosRequestConfig = {}) => {
+    return useQuery({
+      queryKey: queryKey,
+      queryFn: () => this.getAll<T>(config),
+      placeholderData: keepPreviousData,
+    });
+  };
+
   useGetAll = <T>(queryKey: any[], config: AxiosRequestConfig = {}) => {
     return useQuery({
       queryKey: queryKey,

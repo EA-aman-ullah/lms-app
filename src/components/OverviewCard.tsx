@@ -27,8 +27,10 @@ const overviewCard = () => {
     "bg-accent",
   ];
 
-  const { useGetAll } = dashboardService;
-  const { data, isLoading } = useGetAll<DBCard[]>([DASHBOARD_CARDS]);
+  const { useGetAllWithOutPagination } = dashboardService;
+  const { data, isLoading } = useGetAllWithOutPagination<DBCard[]>([
+    DASHBOARD_CARDS,
+  ]);
 
   if (isLoading) return <Loader />;
 
